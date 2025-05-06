@@ -1,10 +1,10 @@
-name: CICD
+name: Deploy Devel
 
 on:
   push:
-    branches: ["main"]
+    branches: ["devel"]
   pull_request:
-    branches: ["main"]
+    branches: ["devel"]
 
 jobs:
   deploy:
@@ -15,11 +15,11 @@ jobs:
 
       - name: Build the Docker Image
         run: |
-          docker build . --file Dockerfile --tag icomphub-web-app:latest
+          docker build . --file Dockerfile --tag icomphub-web-app-devel:latest
 
       - name: Save Docker Image as .tar
         run: |
-          docker save icomphub-web-app:latest -o icomphub-web-app.tar
+          docker save icomphub-web-app-devel:latest -o icomphub-web-app-devel.tar
 
       - name: Setup SSH
         run: |
@@ -30,13 +30,13 @@ jobs:
 
       - name: Copy Docker Image to Server
         run: |
-          scp icomphub-web-app.tar ${{ secrets.SERVER01_USER }}@${{ secrets.SERVER01_HOST }}:/tmp/icomphub-web-app.tar
+          scp icomphub-web-app-devel.tar ${{ secrets.SERVER01_USER }}@${{ secrets.SERVER01_HOST }}:/tmp/icomphub-web-app-devel.tar
 
       - name: Run Docker Image on VPS
         run: |
           ssh ${{ secrets.SERVER01_USER }}@${{ secrets.SERVER01_HOST }} << 'EOF'
-            docker load -i /tmp/icomphub-web-app.tar
-            docker stop icomphub-web-app || true
-            docker rm icomphub-web-app || true
-            docker run -d --name icomphub-web-app -p 3016:3000 icomphub-web-app:latest
+            docker load -i /tmp/icomphub-web-app-devel.tar
+            docker stop icomphub-web-app-devel || true
+            docker rm icomphub-web-app-devel || true
+            docker run -d --name icomphub-web-app-devel -p ${{ vars.WEB_APP_PORT_DEVEL }}:3000 icomphub-web-app-devel:latest
           EOF
