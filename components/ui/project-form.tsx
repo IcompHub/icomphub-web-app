@@ -88,7 +88,7 @@ export default function ProjectForm() {
           control={form.control}
           name="nome"
           render={({ field }) => (
-            <FormItem className="space-y-2">
+            <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>
               <FormControl>
                 <Input
@@ -106,7 +106,7 @@ export default function ProjectForm() {
           control={form.control}
           name="descricao"
           render={({ field }) => (
-            <FormItem className="space-y-2">
+            <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">
                 Descrição
               </FormLabel>
@@ -126,7 +126,7 @@ export default function ProjectForm() {
           control={form.control}
           name="participantes"
           render={({ field }) => (
-            <FormItem className="space-y-2">
+            <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">
                 Participantes
               </FormLabel>
@@ -160,7 +160,7 @@ export default function ProjectForm() {
           control={form.control}
           name="tecnologias"
           render={({ field }) => (
-            <FormItem className="space-y-2">
+            <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">
                 Tecnologias
               </FormLabel>
@@ -195,7 +195,7 @@ export default function ProjectForm() {
           control={form.control}
           name="url"
           render={({ field }) => (
-            <FormItem className="space-y-2">
+            <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">
                 URL do projeto
               </FormLabel>
