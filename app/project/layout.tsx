@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function LayoutProject({
   children,
 }: Readonly<{
@@ -7,14 +9,14 @@ export default function LayoutProject({
     <div className="min-h-screen bg-[#010103] text-[#f1f6fb]">
       <header className="flex items-center justify-between p-4 border-b border-[#1a2332]">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-white rounded-full overflow-hidden">
-            <img
-              //   src="/placeholder.svg?height=40&width=40"
-              alt="IcompHub Logo"
-              className="object-cover w-full h-full"
-            />
-          </div>
-          <span className="text-xl font-bold">IcompHub</span>
+          <Image
+            src="/main_logo.svg"
+            width={30}
+            height={30}
+            alt="IcompHub Logo"
+          />
+
+          <span className="text-xl font-bold ml-1">IcompHub</span>
         </div>
         <button className="text-[#f1f6fb]">
           <svg
