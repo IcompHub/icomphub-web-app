@@ -20,7 +20,7 @@ export default function Home() {
       <div className="max-w-md mx-auto bg-[#0e1116] rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-2">Cadastrar Projeto</h1>
         <p className="text-[#94a3b8] mb-8">
-          Texto que a desginer ainda vai pensar melhor.
+          Queremos saber um pouco do seu projeto :)
         </p>
 
         <ProjectForm onSubmit={handleCreate} submitText="Cadastrar" />
