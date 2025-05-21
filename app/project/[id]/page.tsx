@@ -14,7 +14,7 @@ import { MembersList } from "@/components/project/members-list";
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
   // In a real app, you would fetch the project data based on the ID
-  const project = projectData[1];
+  const project = projectData[0];
 
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f5f9]">
