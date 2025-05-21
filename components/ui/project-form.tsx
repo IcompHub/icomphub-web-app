@@ -3,8 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { ChevronDown } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,51 +13,46 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { MultiSelect } from "./multi-select";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   nome: z.string().min(2, {
     message: "Nome deve ter pelo menos 2 caracteres.",
   }),
   descricao: z.string().min(10, {
     message: "Descrição deve ter pelo menos 10 caracteres.",
   }),
-  participantes: z.string().min(2, {
-    message: "Selecione pelo menos um participante.",
-  }),
-  tecnologias: z.string().min(2, {
-    message: "Selecione pelo menos uma tecnologia.",
-  }),
+  participantes: z.union([z.string(), z.array(z.string())]),
+  tecnologias: z.union([z.string(), z.array(z.string())]),
   url: z.string().url({
     message: "URL inválida. Insira uma URL completa (ex: https://exemplo.com)",
   }),
 });
 
-export default function ProjectForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+type FormData = z.infer<typeof formSchema>;
+
+interface ProjectFormProps {
+  initialData?: Partial<FormData>;
+  onSubmit: (data: FormData) => void;
+  submitText?: string;
+}
+
+export default function ProjectForm({
+  initialData,
+  onSubmit,
+  submitText = "Cadastrar",
+}: ProjectFormProps) {
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: "",
-      descricao: "",
-      participantes: "",
-      tecnologias: "",
-      url: "",
+      nome: initialData?.nome || "",
+      descricao: initialData?.descricao || "",
+      participantes: initialData?.participantes || [],
+      tecnologias: initialData?.tecnologias || [],
+      url: initialData?.url || "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Here you would typically send the data to your backend
-  }
-
-  // Sample data for participants and technologies
   const participantesOptions = [
     { value: "raquel", label: "Raquel de Sá" },
     { value: "keren", label: "Keren Guimarães" },
@@ -130,27 +123,14 @@ export default function ProjectForm() {
               <FormLabel className="text-[#f1f6fb] font-medium">
                 Participantes
               </FormLabel>
-              <div className="relative">
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <MultiSelect
-                      placeholder="Digite o nome dos integrantes"
-                      options={participantesOptions}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <SelectContent className="bg-[#0f172a] border border-[#1a222f] text-[#f1f6fb]">
-                    <SelectItem value="joao">João Silva</SelectItem>
-                    <SelectItem value="maria">Maria Santos</SelectItem>
-                    <SelectItem value="pedro">Pedro Oliveira</SelectItem>
-                    <SelectItem value="ana">Ana Costa</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <FormControl>
+                <MultiSelect
+                  placeholder="Digite o nome dos integrantes"
+                  options={participantesOptions}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
@@ -164,28 +144,14 @@ export default function ProjectForm() {
               <FormLabel className="text-[#f1f6fb] font-medium">
                 Tecnologias
               </FormLabel>
-              <div className="relative">
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <MultiSelect
-                      placeholder="Digite os tecnologias utilizadas"
-                      options={tecnologiasOptions}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <SelectContent className="bg-[#0f172a] border border-[#1a222f] text-[#f1f6fb]">
-                    <SelectItem value="react">React</SelectItem>
-                    <SelectItem value="nextjs">Next.js</SelectItem>
-                    <SelectItem value="typescript">TypeScript</SelectItem>
-                    <SelectItem value="tailwind">Tailwind CSS</SelectItem>
-                    <SelectItem value="node">Node.js</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <FormControl>
+                <MultiSelect
+                  placeholder="Digite as tecnologias utilizadas"
+                  options={tecnologiasOptions}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
@@ -215,7 +181,7 @@ export default function ProjectForm() {
           type="submit"
           className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors"
         >
-          Cadastrar
+          {submitText}
         </Button>
       </form>
     </Form>
