@@ -1,0 +1,209 @@
+import Link from "next/link";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Github,
+  Linkedin,
+  MoreHorizontal,
+} from "lucide-react";
+
+// Mock data for the project
+const projectData = {
+  id: "innova",
+  title: "Innova",
+  gradient: "from-pink-500 via-red-500 to-yellow-500",
+  description:
+    "Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+  participants: [
+    {
+      name: "Keren Guimarães",
+      role: "Analista de Requisitos",
+      github: true,
+      linkedin: true,
+    },
+    { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+    {
+      name: "Nelson Carvalho",
+      role: "Dev FullStack",
+      github: true,
+      linkedin: false,
+    },
+    {
+      name: "Raquel de Sá",
+      role: "Dev/Frontend",
+      github: true,
+      linkedin: true,
+    },
+    { name: "Sarah Júlia", role: "Dev Backend", github: false, linkedin: true },
+  ],
+  technologies: [
+    { name: "React Js", icon: "/icons/react.svg" },
+    { name: "Firebase", icon: "/icons/firebase.svg" },
+    { name: "Go Lang", icon: "/icons/golang.svg" },
+    { name: "C#", icon: "/icons/csharp.svg" },
+  ],
+};
+
+export default function ProjectPage({ params }: { params: { id: string } }) {
+  // In a real app, you would fetch the project data based on the ID
+  const project = projectData;
+
+  return (
+    <div className="min-h-screen bg-[#010103] text-[#f1f5f9]">
+      {/* Breadcrumb */}
+      <div className="p-4 text-sm text-[#64748b]">
+        <div className="max-w-3xl mx-auto">
+          <Link href="/" className="hover:text-[#f1f5f9]">
+            Home
+          </Link>
+          {" > "}
+          <Link href="/" className="hover:text-[#f1f5f9]">
+            Projetos
+          </Link>
+          {" > "}
+          <span className="text-[#f1f5f9]">{project.title}</span>
+        </div>
+      </div>
+
+      {/* Banner */}
+      <div className={`h-48 bg-gradient-to-r ${project.gradient}`} />
+
+      {/* Content */}
+      <div className="max-w-3xl mx-auto px-6 pb-16">
+        {/* Project Title */}
+        <h1 className="text-3xl font-bold mt-6 mb-2 pb-2 border-b border-[#1a222f]">
+          {project.title}
+        </h1>
+
+        {/* Project Description */}
+        <p className="text-[#64748b] mt-4 mb-8">{project.description}</p>
+
+        {/* Participants */}
+        <h2 className="text-xl font-bold mb-4">Participantes</h2>
+        <div className="space-y-2 mb-8">
+          {project.participants.map((participant, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-3 bg-[#0c1524] rounded-lg"
+            >
+              <div className="font-medium">{participant.name}</div>
+              <div className="flex items-center">
+                <span className="text-[#64748b] text-sm mr-4">
+                  {participant.role}
+                </span>
+                <div className="flex space-x-2">
+                  {participant.github && (
+                    <Link
+                      href="#"
+                      className="text-[#f1f5f9] hover:text-[#64748b]"
+                    >
+                      <Github size={20} />
+                    </Link>
+                  )}
+                  {participant.linkedin && (
+                    <Link
+                      href="#"
+                      className="text-[#f1f5f9] hover:text-[#64748b]"
+                    >
+                      <Linkedin size={20} />
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Technologies */}
+        <h2 className="text-xl font-bold mb-4">Tecnlogias</h2>
+        <div className="relative mb-8">
+          <div className="flex space-x-8 items-center py-4 overflow-x-auto">
+            <button className="absolute left-0 z-10 bg-gradient-to-r from-[#010103] to-transparent pl-1 pr-6 h-full flex items-center">
+              <ChevronLeft size={24} />
+            </button>
+
+            {project.technologies.map((tech, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center space-y-2 min-w-[80px]"
+              >
+                <div className="w-12 h-12 flex items-center justify-center">
+                  <TechIcon name={tech.name} />
+                </div>
+                <span className="text-sm">{tech.name}</span>
+              </div>
+            ))}
+
+            <button className="absolute right-0 z-10 bg-gradient-to-l from-[#010103] to-transparent pr-1 pl-6 h-full flex items-center">
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        </div>
+
+        {/* README.md */}
+        <h2 className="text-xl font-bold mb-4">README.md</h2>
+        <div className="bg-[#0c1524] rounded-lg p-4 mb-12 flex justify-center items-center h-16">
+          <MoreHorizontal size={24} className="text-[#64748b]" />
+        </div>
+
+        {/* Footer */}
+        <div className="text-center space-y-1 mt-8">
+          <div className="flex justify-center items-center mb-2">
+            <Github size={20} className="mr-2" />
+            <span className="font-medium">IcompHub</span>
+          </div>
+          <div className="text-[#64748b] text-sm">
+            Keren Guimarães • Luis Santos • Nelson Carvalho
+          </div>
+          <div className="text-[#64748b] text-sm">
+            Raquel de Sá • Sarah Júlia
+          </div>
+          <div className="text-[#64748b] text-sm mt-1">2025</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TechIcon({ name }: { name: string }) {
+  // Simple component to render tech icons
+  // In a real app, you would use actual SVG icons
+
+  if (name === "React Js") {
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#61dafb] bg-opacity-20 flex items-center justify-center">
+        <div className="text-[#61dafb] text-2xl">⚛️</div>
+      </div>
+    );
+  }
+
+  if (name === "Firebase") {
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#ffca28] bg-opacity-20 flex items-center justify-center">
+        <div className="text-[#ffca28] text-2xl">🔥</div>
+      </div>
+    );
+  }
+
+  if (name === "Go Lang") {
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#00add8] bg-opacity-20 flex items-center justify-center">
+        <div className="text-[#00add8] text-2xl">🔹</div>
+      </div>
+    );
+  }
+
+  if (name === "C#") {
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#9b4f96] bg-opacity-20 flex items-center justify-center">
+        <div className="text-[#9b4f96] text-2xl">🔷</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
+      ?
+    </div>
+  );
+}
