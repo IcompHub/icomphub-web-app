@@ -7,6 +7,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { Footer } from "@/components/project/footer";
+import { ProjectBreadcrumb } from "@/components/project/project-breadcrumb";
 
 // Mock data for the project
 const projectData = {
@@ -51,8 +52,8 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f5f9]">
-      {/* Breadcrumb */}
-      <div className="p-4 text-sm text-[#64748b]">
+      {/* Breadcrumb
+      <div className=" text-sm text-[#64748b]">
         <div className="max-w-3xl mx-auto">
           <Link href="/" className="hover:text-[#f1f5f9]">
             Home
@@ -64,7 +65,8 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
           {" > "}
           <span className="text-[#f1f5f9]">{project.title}</span>
         </div>
-      </div>
+      </div> */}
+      <ProjectBreadcrumb title={project.title} />
 
       {/* Banner */}
       <div className={`h-48 bg-gradient-to-r ${project.gradient}`} />
