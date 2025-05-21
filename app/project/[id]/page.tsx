@@ -8,78 +8,27 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/project/footer";
 import { ProjectBreadcrumb } from "@/components/project/project-breadcrumb";
-
-// Mock data for the project
-const projectData = {
-  id: "innova",
-  title: "Innova",
-  gradient: "from-pink-500 via-red-500 to-yellow-500",
-  description:
-    "Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
-  participants: [
-    {
-      name: "Keren Guimarães",
-      role: "Analista de Requisitos",
-      github: true,
-      linkedin: true,
-    },
-    { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
-    {
-      name: "Nelson Carvalho",
-      role: "Dev FullStack",
-      github: true,
-      linkedin: false,
-    },
-    {
-      name: "Raquel de Sá",
-      role: "Dev/Frontend",
-      github: true,
-      linkedin: true,
-    },
-    { name: "Sarah Júlia", role: "Dev Backend", github: false, linkedin: true },
-  ],
-  technologies: [
-    { name: "React Js", icon: "/icons/react.svg" },
-    { name: "Firebase", icon: "/icons/firebase.svg" },
-    { name: "Go Lang", icon: "/icons/golang.svg" },
-    { name: "C#", icon: "/icons/csharp.svg" },
-  ],
-};
+import { projectData } from "../page";
+import { TechnologiesCarousel } from "@/components/project/technologies-carousel";
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
   // In a real app, you would fetch the project data based on the ID
-  const project = projectData;
+  const project = projectData[0];
 
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f5f9]">
-      {/* Breadcrumb
-      <div className=" text-sm text-[#64748b]">
-        <div className="max-w-3xl mx-auto">
-          <Link href="/" className="hover:text-[#f1f5f9]">
-            Home
-          </Link>
-          {" > "}
-          <Link href="/project" className="hover:text-[#f1f5f9]">
-            Projetos
-          </Link>
-          {" > "}
-          <span className="text-[#f1f5f9]">{project.title}</span>
-        </div>
-      </div> */}
       <ProjectBreadcrumb title={project.title} />
 
-      {/* Banner */}
       <div className={`h-48 bg-gradient-to-r ${project.gradient}`} />
 
-      {/* Content */}
       <div className="max-w-3xl mx-auto px-6 pb-16">
-        {/* Project Title */}
         <h1 className="text-3xl font-bold mt-6 mb-2 pb-2 border-b border-[#1a222f]">
           {project.title}
         </h1>
 
-        {/* Project Description */}
-        <p className="text-[#64748b] mt-4 mb-8">{project.description}</p>
+        <p className="text-[#64748b] mt-4 mb-8 text-sm">
+          {project.description}
+        </p>
 
         {/* Participants */}
         <h2 className="text-xl font-bold mb-4">Participantes</h2>
@@ -87,7 +36,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
           {project.participants.map((participant, index) => (
             <div
               key={index}
-              className="flex items-center justify-between p-3 bg-[#0c1524] rounded-lg"
+              className="flex items-center justify-between p-2.5 bg-[#080D17] rounded-lg border border-[#1A222F]"
             >
               <div className="font-medium">{participant.name}</div>
               <div className="flex items-center">
@@ -118,9 +67,9 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         </div>
 
         {/* Technologies */}
-        <h2 className="text-xl font-bold mb-4">Tecnlogias</h2>
+        {/* <h2 className="text-xl font-bold mb-4">Tecnlogias</h2>
         <div className="relative mb-8">
-          <div className="flex space-x-8 items-center py-4 overflow-x-auto">
+          <div className="flex space-x-8 items-center py-4 px-6 justify-start overflow-x-auto">
             <button className="absolute left-0 z-10 bg-gradient-to-r from-[#010103] to-transparent pl-1 pr-6 h-full flex items-center">
               <ChevronLeft size={24} />
             </button>
@@ -141,60 +90,18 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
               <ChevronRight size={24} />
             </button>
           </div>
-        </div>
+        </div> */}
+        <TechnologiesCarousel technologies={project.technologies} />
 
         {/* README.md */}
         <h2 className="text-xl font-bold mb-4">README.md</h2>
-        <div className="bg-[#0c1524] rounded-lg p-4 mb-12 flex justify-center items-center h-16">
+        <div className="bg-[#080D17] rounded-lg p-4 mb-12 flex justify-center items-center h-16 border border-[#1A222F]">
           <MoreHorizontal size={24} className="text-[#64748b]" />
         </div>
 
         {/* Footer */}
         <Footer />
       </div>
-    </div>
-  );
-}
-
-function TechIcon({ name }: { name: string }) {
-  // Simple component to render tech icons
-  // In a real app, you would use actual SVG icons
-
-  if (name === "React Js") {
-    return (
-      <div className="w-10 h-10 rounded-full bg-[#61dafb] bg-opacity-20 flex items-center justify-center">
-        <div className="text-[#61dafb] text-2xl">⚛️</div>
-      </div>
-    );
-  }
-
-  if (name === "Firebase") {
-    return (
-      <div className="w-10 h-10 rounded-full bg-[#ffca28] bg-opacity-20 flex items-center justify-center">
-        <div className="text-[#ffca28] text-2xl">🔥</div>
-      </div>
-    );
-  }
-
-  if (name === "Go Lang") {
-    return (
-      <div className="w-10 h-10 rounded-full bg-[#00add8] bg-opacity-20 flex items-center justify-center">
-        <div className="text-[#00add8] text-2xl">🔹</div>
-      </div>
-    );
-  }
-
-  if (name === "C#") {
-    return (
-      <div className="w-10 h-10 rounded-full bg-[#9b4f96] bg-opacity-20 flex items-center justify-center">
-        <div className="text-[#9b4f96] text-2xl">🔷</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
-      ?
     </div>
   );
 }

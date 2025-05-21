@@ -5,6 +5,81 @@ import { Input } from "@/components/ui/input";
 import { ProjectPagination } from "@/components/project/project-pagination";
 import { Footer } from "@/components/project/footer";
 
+// Mock data for the project
+export const projectData = [
+  {
+    id: "innova",
+    title: "Innova",
+    gradient: "from-pink-500 via-red-500 to-yellow-500",
+    description:
+      "Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+    participants: [
+      {
+        name: "Keren Guimarães",
+        role: "Analista de Requisitos",
+        github: true,
+        linkedin: true,
+      },
+      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+      {
+        name: "Nelson Carvalho",
+        role: "Dev FullStack",
+        github: true,
+        linkedin: false,
+      },
+      {
+        name: "Raquel de Sá",
+        role: "Dev/Frontend",
+        github: true,
+        linkedin: true,
+      },
+      {
+        name: "Sarah Júlia",
+        role: "Dev Backend",
+        github: false,
+        linkedin: true,
+      },
+    ],
+    technologies: [
+      { name: "React Js", icon: "/icons/react.svg" },
+      { name: "Firebase", icon: "/icons/firebase.svg" },
+      { name: "Go Lang", icon: "/icons/golang.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+    ],
+  },
+  {
+    id: "projeto-sem-foto",
+    title: "Projeto sem foto",
+    gradient: "from-cyan-400 to-green-400",
+    description:
+      "Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+    participants: [
+      {
+        name: "Keren Guimarães",
+        role: "Analista de Requisitos",
+        github: true,
+        linkedin: true,
+      },
+      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+      {
+        name: "Nelson Carvalho",
+        role: "Dev FullStack",
+        github: true,
+        linkedin: false,
+      },
+    ],
+    technologies: [
+      { name: "Go Lang", icon: "/icons/golang.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+    ],
+  },
+];
+
 export default function ProjectsPage() {
   return (
     <div className=" bg-[#010103] text-[#f1f5f9] p-6">
@@ -25,19 +100,16 @@ export default function ProjectsPage() {
         </div>
 
         <div className="space-y-8 ">
-          <ProjectCard
-            id="innova"
-            title="Innova"
-            gradient="from-pink-500 via-red-500 to-yellow-500"
-            description="Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto"
-          />
+          {projectData.map((project) => (
+            <ProjectCard
+              key={project.id}
+              id={project.id}
+              title={project.title}
+              gradient={project.gradient}
+              description={project.description}
+            />
+          ))}
 
-          <ProjectCard
-            id="projeto-sem-foto"
-            title="Projeto sem foto"
-            gradient="from-cyan-400 to-green-400"
-            description="Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto"
-          />
           <ProjectPagination />
           <Footer />
         </div>
