@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Logo } from "@/components/general/logo";
 
 export default function LayoutProject({
   children,
@@ -9,12 +9,7 @@ export default function LayoutProject({
     <div className="min-h-screen bg-[#010103] text-[#f1f6fb]">
       <header className="flex items-center justify-between p-4 border-b border-[#1a2332]">
         <div className="flex items-center gap-2">
-          <Image
-            src="/main_logo.svg"
-            width={30}
-            height={30}
-            alt="IcompHub Logo"
-          />
+          <Logo w={30} h={30} />
 
           <span className="text-xl font-bold ml-1">IcompHub</span>
         </div>

@@ -2,15 +2,8 @@ import type React from "react";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { ProjectPagination } from "@/components/project/project-pagination";
+import { Footer } from "@/components/project/footer";
 
 export default function ProjectsPage() {
   return (
@@ -45,30 +38,8 @@ export default function ProjectsPage() {
             gradient="from-cyan-400 to-green-400"
             description="Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto"
           />
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  2
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <ProjectPagination />
+          <Footer />
         </div>
       </div>
     </div>

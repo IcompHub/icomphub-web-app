@@ -6,6 +6,7 @@ import {
   Linkedin,
   MoreHorizontal,
 } from "lucide-react";
+import { Footer } from "@/components/project/footer";
 
 // Mock data for the project
 const projectData = {
@@ -57,7 +58,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             Home
           </Link>
           {" > "}
-          <Link href="/" className="hover:text-[#f1f5f9]">
+          <Link href="/project" className="hover:text-[#f1f5f9]">
             Projetos
           </Link>
           {" > "}
@@ -147,19 +148,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         </div>
 
         {/* Footer */}
-        <div className="text-center space-y-1 mt-8">
-          <div className="flex justify-center items-center mb-2">
-            <Github size={20} className="mr-2" />
-            <span className="font-medium">IcompHub</span>
-          </div>
-          <div className="text-[#64748b] text-sm">
-            Keren Guimarães • Luis Santos • Nelson Carvalho
-          </div>
-          <div className="text-[#64748b] text-sm">
-            Raquel de Sá • Sarah Júlia
-          </div>
-          <div className="text-[#64748b] text-sm mt-1">2025</div>
-        </div>
+        <Footer />
       </div>
     </div>
   );
