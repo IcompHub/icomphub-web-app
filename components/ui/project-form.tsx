@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { MultiSelect } from "./multi-select";
+import { MultiCombobox } from "./combobox";
 
 export const formSchema = z.object({
   nome: z.string().min(2, {
@@ -22,8 +22,12 @@ export const formSchema = z.object({
   descricao: z.string().min(10, {
     message: "Descrição deve ter pelo menos 10 caracteres.",
   }),
-  participantes: z.union([z.string(), z.array(z.string())]),
-  tecnologias: z.union([z.string(), z.array(z.string())]),
+  participantes: z.array(z.string()).min(1, {
+    message: "Selecione pelo menos um participante.",
+  }),
+  tecnologias: z.array(z.string()).min(1, {
+    message: "Selecione pelo menos uma tecnologia.",
+  }),
   url: z.string().url({
     message: "URL inválida. Insira uma URL completa (ex: https://exemplo.com)",
   }),
@@ -84,11 +88,7 @@ export default function ProjectForm({
             <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Digite o nome do projeto"
-                  {...field}
-                  className="w-full px-4 py-6 bg-[#0f172a] border border-[#1a222f] rounded-md text-[#f1f6fb] placeholder:text-[#64748b]"
-                />
+                <Input placeholder="Digite o nome do projeto" {...field} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -107,7 +107,6 @@ export default function ProjectForm({
                 <Input
                   placeholder="Explique sobre o que é o projeto"
                   {...field}
-                  className="w-full px-4 py-6 bg-[#0f172a] border border-[#1a222f] rounded-md text-[#f1f6fb] placeholder:text-[#64748b]"
                 />
               </FormControl>
               <FormMessage className="text-red-500" />
@@ -124,7 +123,7 @@ export default function ProjectForm({
                 Participantes
               </FormLabel>
               <FormControl>
-                <MultiSelect
+                <MultiCombobox
                   placeholder="Digite o nome dos integrantes"
                   options={participantesOptions}
                   value={field.value}
@@ -145,7 +144,7 @@ export default function ProjectForm({
                 Tecnologias
               </FormLabel>
               <FormControl>
-                <MultiSelect
+                <MultiCombobox
                   placeholder="Digite as tecnologias utilizadas"
                   options={tecnologiasOptions}
                   value={field.value}
@@ -169,7 +168,6 @@ export default function ProjectForm({
                 <Input
                   placeholder="Digite onde o site está hospedado"
                   {...field}
-                  className="w-full px-4 py-6 bg-[#0f172a] border border-[#1a222f] rounded-md text-[#f1f6fb] placeholder:text-[#64748b]"
                 />
               </FormControl>
               <FormMessage className="text-red-500" />
