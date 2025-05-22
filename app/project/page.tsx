@@ -4,81 +4,10 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { ProjectPagination } from "@/components/project/project-pagination";
 import { Footer } from "@/components/project/footer";
+import { listarProjetos } from "@/lib/api/project";
+import { Badge } from "@/components/ui/badge";
 
-// Mock data for the project
-export const projectData = [
-  {
-    id: "innova",
-    title: "Innova",
-    gradient: "from-pink-500 via-red-500 to-yellow-500",
-    description:
-      "Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
-    participants: [
-      {
-        name: "Keren Guimarães",
-        role: "Analista de Requisitos",
-        github: true,
-        linkedin: true,
-      },
-      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
-      {
-        name: "Nelson Carvalho",
-        role: "Dev FullStack",
-        github: true,
-        linkedin: false,
-      },
-      {
-        name: "Raquel de Sá",
-        role: "Dev/Frontend",
-        github: true,
-        linkedin: true,
-      },
-      {
-        name: "Sarah Júlia",
-        role: "Dev Backend",
-        github: false,
-        linkedin: true,
-      },
-    ],
-    technologies: [
-      { name: "React Js", icon: "/icons/react.svg" },
-      { name: "Firebase", icon: "/icons/firebase.svg" },
-      { name: "Go Lang", icon: "/icons/golang.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-    ],
-  },
-  {
-    id: "projeto-sem-foto",
-    title: "Projeto sem foto",
-    gradient: "from-cyan-400 to-green-400",
-    description:
-      "Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto. Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
-    participants: [
-      {
-        name: "Keren Guimarães",
-        role: "Analista de Requisitos",
-        github: true,
-        linkedin: true,
-      },
-      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
-      {
-        name: "Nelson Carvalho",
-        role: "Dev FullStack",
-        github: true,
-        linkedin: false,
-      },
-    ],
-    technologies: [
-      { name: "Go Lang", icon: "/icons/golang.svg" },
-      { name: "C#", icon: "/icons/csharp.svg" },
-    ],
-  },
-];
+const projetos = await listarProjetos();
 
 export default function ProjectsPage() {
   return (
@@ -100,13 +29,14 @@ export default function ProjectsPage() {
         </div>
 
         <div className="space-y-8 ">
-          {projectData.map((project) => (
+          {projetos.map((project: any) => (
             <ProjectCard
               key={project.id}
               id={project.id}
               title={project.title}
               gradient={project.gradient}
               description={project.description}
+              technologies={project.technologies}
             />
           ))}
 
@@ -123,9 +53,16 @@ interface ProjectCardProps {
   title: string;
   description: string;
   gradient: string;
+  technologies: { name: string; icon: string }[];
 }
 
-function ProjectCard({ id, title, description, gradient }: ProjectCardProps) {
+function ProjectCard({
+  id,
+  title,
+  description,
+  gradient,
+  technologies,
+}: ProjectCardProps) {
   return (
     <Link href={`/project/${id}`} className="block">
       <div className="rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
@@ -133,9 +70,10 @@ function ProjectCard({ id, title, description, gradient }: ProjectCardProps) {
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-2">{title}</h2>
           <p className="text-[#64748b] mb-4 text-sm">{description}</p>
-          <div className="flex gap-2">
-            <TechTag>React JS</TechTag>
-            <TechTag>GoLang</TechTag>
+          <div className="flex gap-2 w-fit">
+            {technologies.map((tech, i) => (
+              <TechTag key={i} tech={tech.name} />
+            ))}
           </div>
         </div>
       </div>
@@ -143,10 +81,10 @@ function ProjectCard({ id, title, description, gradient }: ProjectCardProps) {
   );
 }
 
-function TechTag({ children }: { children: React.ReactNode }) {
+function TechTag({ tech }: { tech: string }) {
   return (
-    <span className="px-4 py-1.5 rounded-full border border-[#F1F5F9] text-sm">
-      {children}
-    </span>
+    <Badge className="px-2 py-1.5 rounded-full bg-transparent border border-[#F1F5F9] text-sm ">
+      {tech}
+    </Badge>
   );
 }

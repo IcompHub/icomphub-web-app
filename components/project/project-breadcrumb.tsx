@@ -15,11 +15,6 @@ export function ProjectBreadcrumb({ title }: BreadcrumbProps) {
     <Breadcrumb className="max-w-3xl p-6 mx-auto text-[#64748b] ">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbSeparator className="text-[#64748b]" />
-        <BreadcrumbItem>
           <BreadcrumbLink href="/project">Projetos</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="text-[#64748b]" />

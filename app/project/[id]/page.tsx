@@ -1,13 +1,21 @@
 import { MoreHorizontal } from "lucide-react";
 import { Footer } from "@/components/project/footer";
 import { ProjectBreadcrumb } from "@/components/project/project-breadcrumb";
-import { projectData } from "../page";
+
 import { TechnologiesCarousel } from "@/components/project/technologies-carousel";
 import { MembersList } from "@/components/project/members-list";
+import { listarProjetoPorID } from "@/lib/api/project";
+import { notFound } from "next/navigation";
 
-export default function ProjectPage({ params }: { params: { id: string } }) {
-  // In a real app, you would fetch the project data based on the ID
-  const project = projectData[0];
+export default async function ProjectPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const project = await listarProjetoPorID(params.id);
+  if (!project) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f5f9]">

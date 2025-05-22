@@ -7,7 +7,7 @@ export default function LayoutProject({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-[#010103] text-[#f1f6fb]">
+    <div className="min-h-screen bg-[#010103] text-[#f1f6fb] pt-20">
       {/* <header className="flex items-center justify-between p-4 border-b border-[#1a2332]">
         <div className="flex items-center gap-2">
           <Logo w={30} h={30} />
