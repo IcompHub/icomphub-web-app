@@ -29,7 +29,7 @@ export default function ProjectsPage() {
         </div>
 
         <div className="space-y-8 ">
-          {projetos.map((project: any) => (
+          {projetos.map((project: ProjectCardProps) => (
             <ProjectCard
               key={project.id}
               id={project.id}

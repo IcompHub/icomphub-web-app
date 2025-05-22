@@ -7,12 +7,13 @@ import { MembersList } from "@/components/project/members-list";
 import { listarProjetoPorID } from "@/lib/api/project";
 import { notFound } from "next/navigation";
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: { id: string };
+export default async function ProjectPage(props: {
+  params: Promise<{ id: string }>;
 }) {
-  const project = await listarProjetoPorID(params.id);
+  const params = await props.params;
+  const id = params.id;
+  const project = await listarProjetoPorID(id);
+
   if (!project) {
     notFound();
   }

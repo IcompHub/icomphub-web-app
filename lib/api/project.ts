@@ -75,12 +75,12 @@ export const projectData = [
   },
 ];
 
-export async function criarProjeto(data: any) {
+export async function criarProjeto(data: string[]) {
   const res = await api.post("/projects", data);
   return res.data;
 }
 
-export async function atualizarProjeto(id: string | number, data: any) {
+export async function atualizarProjeto(id: string | number, data: string[]) {
   const res = await api.put(`/projects/${id}`, data);
   return res.data;
 }
@@ -92,7 +92,7 @@ export async function listarProjetos() {
 }
 export async function listarProjetoPorID(id: string) {
   // const res = await api.get(`/projects/${id}`);
-  return projectData.find((p: any) => p.id === id);
+  return projectData.find((p) => p.id === id);
   // return res.data;
 }
 

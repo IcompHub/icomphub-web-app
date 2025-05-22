@@ -1,4 +1,3 @@
-import { Github } from "lucide-react";
 import { Logo } from "../general/logo";
 
 export function Footer() {

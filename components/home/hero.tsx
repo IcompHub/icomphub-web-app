@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { FileText, FolderOpenDot, Sparkles } from "lucide-react";
+import { FolderOpenDot } from "lucide-react";
 import { FloatingPaper } from "@/components/home/floating-paper";
 import { RoboAnimation } from "@/components/home/robo-animation";
 import Link from "next/link";

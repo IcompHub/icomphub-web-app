@@ -1,4 +1,3 @@
-import { Logo } from "@/components/general/logo";
 import Navbar from "@/components/general/navbar";
 
 export default function LayoutProject({

@@ -54,10 +54,6 @@ export function MultiCombobox({
     onChange(value.filter((v) => v !== val));
   };
 
-  const selectedLabels = value
-    .map((val) => options.find((opt) => opt.value === val)?.label)
-    .filter(Boolean);
-
   return (
     <div className={cn("w-full", className)}>
       <Popover open={open} onOpenChange={setOpen}>

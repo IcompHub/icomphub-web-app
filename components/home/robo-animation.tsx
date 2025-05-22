@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bot } from "lucide-react";
 import { Logo } from "../general/logo";
 
 export function RoboAnimation() {
