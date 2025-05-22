@@ -1,3 +1,4 @@
+import Navbar from "@/components/general/navbar";
 import Hero from "@/components/home/hero";
 import { SparklesCore } from "@/components/home/sparkles";
 // import Navbar from "@/components/home/navbar"
@@ -19,7 +20,6 @@ export default function Home() {
       </div>
 
       <div className="relative z-10">
-        {/* <Navbar /> */}
         <Hero />
       </div>
     </main>

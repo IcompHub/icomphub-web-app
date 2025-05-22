@@ -1,11 +1,4 @@
-import Link from "next/link";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Github,
-  Linkedin,
-  MoreHorizontal,
-} from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { Footer } from "@/components/project/footer";
 import { ProjectBreadcrumb } from "@/components/project/project-breadcrumb";
 import { projectData } from "../page";

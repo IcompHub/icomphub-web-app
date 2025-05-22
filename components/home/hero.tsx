@@ -6,13 +6,19 @@ import { FileText, FolderOpenDot, Sparkles } from "lucide-react";
 import { FloatingPaper } from "@/components/home/floating-paper";
 import { RoboAnimation } from "@/components/home/robo-animation";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <div className="relative min-h-[calc(100vh-76px)] flex items-center">
       {/* Floating papers background */}
       <div className="absolute inset-0 overflow-hidden">
-        <FloatingPaper count={6} />
+        {mounted && <FloatingPaper count={6} />}
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -61,7 +67,7 @@ export default function Hero() {
       </div>
 
       {/* Animated robot */}
-      <div className="absolute bottom-0 right-0 w-96 h-96">
+      <div className="absolute top-2/3 left-1/2 -translate-x-1/2 w-96 h-96">
         <RoboAnimation />
       </div>
     </div>
