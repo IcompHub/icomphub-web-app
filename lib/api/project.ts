@@ -73,6 +73,111 @@ export const projectData = [
       { name: "C#", icon: "/icons/csharp.svg" },
     ],
   },
+  {
+    id: "projeto-2",
+    title: "Projeto 2",
+    gradient: "from-blue-400 to-purple-400",
+    description:
+      " Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+    participants: [
+      {
+        name: "Keren Guimarães",
+        role: "Analista de Requisitos",
+        github: true,
+        linkedin: true,
+      },
+      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+      {
+        name: "Nelson Carvalho",
+        role: "Dev FullStack",
+        github: true,
+        linkedin: false,
+      },
+    ],
+    technologies: [
+      { name: "Go Lang", icon: "/icons/golang.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+    ],
+  },
+
+  {
+    id: "projeto-3",
+    title: "Projeto 3",
+    gradient: "from-blue-800 to-blue-400",
+    description:
+      " Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+    participants: [
+      {
+        name: "Keren Guimarães",
+        role: "Analista de Requisitos",
+        github: true,
+        linkedin: true,
+      },
+      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+      {
+        name: "Nelson Carvalho",
+        role: "Dev FullStack",
+        github: true,
+        linkedin: false,
+      },
+    ],
+    technologies: [
+      { name: "Go Lang", icon: "/icons/golang.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+    ],
+  },
+  {
+    id: "projeto-4",
+    title: "Projeto 4",
+    gradient: "from-pink-700 to-pink-300",
+    description:
+      " Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+    participants: [
+      {
+        name: "Keren Guimarães",
+        role: "Analista de Requisitos",
+        github: true,
+        linkedin: true,
+      },
+      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+      {
+        name: "Nelson Carvalho",
+        role: "Dev FullStack",
+        github: true,
+        linkedin: false,
+      },
+    ],
+    technologies: [
+      { name: "Go Lang", icon: "/icons/golang.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+    ],
+  },
+  {
+    id: "projeto-5",
+    title: "Projeto 5",
+    gradient: "from-pink-700 to-pink-300",
+    description:
+      " Texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto texto descritivo do projeto.",
+    participants: [
+      {
+        name: "Keren Guimarães",
+        role: "Analista de Requisitos",
+        github: true,
+        linkedin: true,
+      },
+      { name: "Luis Santos", role: "QA Tester", github: true, linkedin: false },
+      {
+        name: "Nelson Carvalho",
+        role: "Dev FullStack",
+        github: true,
+        linkedin: false,
+      },
+    ],
+    technologies: [
+      { name: "Go Lang", icon: "/icons/golang.svg" },
+      { name: "C#", icon: "/icons/csharp.svg" },
+    ],
+  },
 ];
 
 export async function criarProjeto(data: string[]) {

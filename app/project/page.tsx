@@ -14,7 +14,7 @@ const projetos = await listarProjetos();
 export default function ProjectsPage() {
   return (
     <div className=" bg-[#010103] text-[#f1f5f9] p-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto ">
         <motion.div
           initial={{ y: -30 }}
           animate={{ y: 0 }}
@@ -36,7 +36,7 @@ export default function ProjectsPage() {
           </div>
         </motion.div>
 
-        <div className="space-y-8 ">
+        <div className="lg:gap-8 md:gap-6 lg:grid md:grid lg:grid-cols-3 md:grid-cols-2">
           {projetos.map((project: ProjectCardProps, i) => (
             <motion.div
               key={project.id}
@@ -54,10 +54,9 @@ export default function ProjectsPage() {
               />
             </motion.div>
           ))}
-
-          <ProjectPagination />
-          <Footer />
         </div>
+        <ProjectPagination />
+        <Footer />
       </div>
     </div>
   );
@@ -80,7 +79,7 @@ function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Link href={`/project/${id}`} className="block">
-      <div className="rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
+      <div className="mb-8 lg:mb-0 md:mb-0 rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
         <div className={`h-26 bg-gradient-to-r ${gradient}`} />
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-2">{title}</h2>
