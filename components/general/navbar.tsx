@@ -12,6 +12,7 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 80, damping: 15 }}
       className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-4 backdrop-blur-sm border-b border-white/10"
     >
       <Link href="/" className="flex items-center space-x-2">
