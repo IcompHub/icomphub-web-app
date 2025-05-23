@@ -2,16 +2,19 @@
 import type React from "react";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { ProjectPagination } from "@/components/project/project-pagination";
 import { Footer } from "@/components/project/footer";
 import { listarProjetos } from "@/lib/api/project";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { SearchInput } from "@/components/general/search";
+import { useState } from "react";
 
 const projetos = await listarProjetos();
 
 export default function ProjectsPage() {
+  const [search, setSearch] = useState("");
+
   return (
     <div className=" bg-[#010103] text-[#f1f5f9] p-6">
       <div className="max-w-6xl mx-auto ">
@@ -27,10 +30,9 @@ export default function ProjectsPage() {
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-[#5d6674]" />
               </div>
-              <Input
-                type="text"
-                placeholder="Pesquisar"
-                className="w-full bg-transparent border border-[#1a222f] py-2 pl-10 pr-4 text-[#f1f5f9] placeholder:text-[#5d6674] focus:outline-none focus:ring-1 focus:ring-[#414d60]"
+              <SearchInput
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
           </div>
