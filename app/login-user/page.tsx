@@ -1,20 +1,24 @@
 "use client";
 
 import LoginForm, { loginSchema } from "@/components/user/login";
+import { useRouter } from "next/router";
 import { z } from "zod";
 
-function handleLogin(values: z.infer<typeof loginSchema>) {
-  console.log("entrar");
-  console.log(values);
-  try {
-    // criarProjeto(values);
-  } catch (error) {
-    alert("Erro ao criar projeto");
-    console.error(error);
-  }
-}
-
 export default function Login() {
+  // const router = useRouter();
+
+  function handleLogin(values: z.infer<typeof loginSchema>) {
+    try {
+      console.log("entrar");
+      console.log(values);
+      // Simular login bem-sucedido
+      // router.push("/projects");
+    } catch (error) {
+      alert("Erro ao logar");
+      console.error(error);
+    }
+  }
+
   return (
     <main className="p-6">
       <div className="max-w-md mx-auto bg-[#0e1116] rounded-lg p-8">
