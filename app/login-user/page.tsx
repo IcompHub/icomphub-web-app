@@ -1,9 +1,10 @@
 "use client";
-import ProjectForm, { formSchema } from "@/components/ui/project-form";
+
+import LoginForm, { loginSchema } from "@/components/user/login";
 import { z } from "zod";
 
-function handleCreate(values: z.infer<typeof formSchema>) {
-  console.log("create");
+function handleLogin(values: z.infer<typeof loginSchema>) {
+  console.log("entrar");
   console.log(values);
   try {
     // criarProjeto(values);
@@ -22,7 +23,7 @@ export default function Login() {
           Seja bem-vind_ de volta ao IcompHub!
         </p>
 
-        {/* <ProjectForm onSubmit={handleCreate} submitText="Cadastrar" /> */}
+        <LoginForm onSubmit={handleLogin} />
       </div>
     </main>
   );

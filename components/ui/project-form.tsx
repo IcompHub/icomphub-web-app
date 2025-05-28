@@ -177,7 +177,7 @@ export default function ProjectForm({
 
         <Button
           type="submit"
-          className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors"
+          className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
         >
           {submitText}
         </Button>
