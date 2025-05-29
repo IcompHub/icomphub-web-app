@@ -13,27 +13,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { MultiCombobox } from "./combobox";
 
-export const formSchema = z.object({
+export const loginSchema = z.object({
   nome: z.string().min(2, {
     message: "Nome deve ter pelo menos 2 caracteres.",
   }),
-  descricao: z.string().min(10, {
-    message: "Descrição deve ter pelo menos 10 caracteres.",
+  password: z.string().min(4, {
+    message: "Senha deve ter pelo menos 4 caracteres.",
   }),
-  participantes: z.array(z.string()).min(1, {
-    message: "Selecione pelo menos um participante.",
+  url_linkedin: z.string().url({
+    message: "URL inválida. Insira uma URL completa (ex: https://exemplo.com)",
   }),
-  tecnologias: z.array(z.string()).min(1, {
-    message: "Selecione pelo menos uma tecnologia.",
-  }),
-  url: z.string().url({
+  url_github: z.string().url({
     message: "URL inválida. Insira uma URL completa (ex: https://exemplo.com)",
   }),
 });
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof loginSchema>;
 
 interface ProjectFormProps {
   initialData?: Partial<FormData>;
@@ -41,42 +37,17 @@ interface ProjectFormProps {
   submitText?: string;
 }
 
-export default function ProjectForm({
+export default function SignUpForm({
   initialData,
   onSubmit,
-  submitText = "Cadastrar",
 }: ProjectFormProps) {
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       nome: initialData?.nome || "",
-      descricao: initialData?.descricao || "",
-      participantes: initialData?.participantes || [],
-      tecnologias: initialData?.tecnologias || [],
-      url: initialData?.url || "",
+      password: initialData?.password || "",
     },
   });
-
-  const participantesOptions = [
-    { value: "raquel", label: "Raquel de Sá" },
-    { value: "keren", label: "Keren Guimarães" },
-    { value: "luis", label: "Luis Santos" },
-    { value: "carlos", label: "Carlos Oliveira" },
-    { value: "ana", label: "Ana Pereira" },
-    { value: "bruno", label: "Bruno Costa" },
-    { value: "julia", label: "Julia Ferreira" },
-  ];
-
-  const tecnologiasOptions = [
-    { value: "react", label: "React" },
-    { value: "nextjs", label: "Next.js" },
-    { value: "typescript", label: "TypeScript" },
-    { value: "tailwind", label: "Tailwind CSS" },
-    { value: "node", label: "Node.js" },
-    { value: "python", label: "Python" },
-    { value: "django", label: "Django" },
-    { value: "flutter", label: "Flutter" },
-  ];
 
   return (
     <Form {...form}>
@@ -88,7 +59,7 @@ export default function ProjectForm({
             <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>
               <FormControl>
-                <Input placeholder="Digite o nome do projeto" {...field} />
+                <Input placeholder="Nome de usuário" {...field} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -97,15 +68,30 @@ export default function ProjectForm({
 
         <FormField
           control={form.control}
-          name="descricao"
+          name="nome"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">
-                Descrição
+                Cargo no projeto
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Cargo no projeto" {...field} />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="url_linkedin"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-[#f1f6fb] font-medium">
+                LinkedIn
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Explique sobre o que é o projeto"
+                  placeholder="Digite onde o site está hospedado"
                   {...field}
                 />
               </FormControl>
@@ -113,56 +99,13 @@ export default function ProjectForm({
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
-          name="participantes"
+          name="url_github"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">
-                Participantes
-              </FormLabel>
-              <FormControl>
-                <MultiCombobox
-                  placeholder="Digite o nome dos integrantes"
-                  options={participantesOptions}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="tecnologias"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                Tecnologias
-              </FormLabel>
-              <FormControl>
-                <MultiCombobox
-                  placeholder="Digite as tecnologias utilizadas"
-                  options={tecnologiasOptions}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                URL do projeto
+                GitHub
               </FormLabel>
               <FormControl>
                 <Input
@@ -175,11 +118,27 @@ export default function ProjectForm({
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-[#f1f6fb] font-medium">
+                Senha
+              </FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="Senha" {...field} />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
         <Button
           type="submit"
           className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
         >
-          {submitText}
+          Cadastrar
         </Button>
       </form>
     </Form>

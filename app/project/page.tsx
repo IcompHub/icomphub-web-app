@@ -1,48 +1,64 @@
+"use client";
 import type React from "react";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { ProjectPagination } from "@/components/project/project-pagination";
 import { Footer } from "@/components/project/footer";
 import { listarProjetos } from "@/lib/api/project";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+import { SearchInput } from "@/components/general/search";
+import { useState } from "react";
 
 const projetos = await listarProjetos();
 
 export default function ProjectsPage() {
+  const [search, setSearch] = useState("");
+
   return (
     <div className=" bg-[#010103] text-[#f1f5f9] p-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex justify-between">
-          <h1 className="text-3xl font-bold mb-2">Projetos</h1>
+      <div className="max-w-6xl mx-auto ">
+        <motion.div
+          initial={{ y: -30 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 80, damping: 15 }}
+        >
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-bold mb-2">Projetos</h1>
 
-          <div className="relative mb-8">
-            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-[#5d6674]" />
+            <div className="relative mb-8">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-[#5d6674]" />
+              </div>
+              <SearchInput
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-            <Input
-              type="text"
-              placeholder="Pesquisar"
-              className="w-full bg-transparent border border-[#1a222f] py-2 pl-10 pr-4 text-[#f1f5f9] placeholder:text-[#5d6674] focus:outline-none focus:ring-1 focus:ring-[#414d60]"
-            />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="space-y-8 ">
-          {projetos.map((project: ProjectCardProps) => (
-            <ProjectCard
+        <div className="lg:gap-8 md:gap-6 lg:grid md:grid lg:grid-cols-3 md:grid-cols-2">
+          {projetos.map((project: ProjectCardProps, i) => (
+            <motion.div
               key={project.id}
-              id={project.id}
-              title={project.title}
-              gradient={project.gradient}
-              description={project.description}
-              technologies={project.technologies}
-            />
+              initial={{ y: -40 * (i + 1) }}
+              animate={{ y: 0 }}
+              transition={{ type: "spring", stiffness: 80, damping: 15 }}
+            >
+              <ProjectCard
+                key={project.id}
+                id={project.id}
+                title={project.title}
+                gradient={project.gradient}
+                description={project.description}
+                technologies={project.technologies}
+              />
+            </motion.div>
           ))}
-
-          <ProjectPagination />
-          <Footer />
         </div>
+        <ProjectPagination />
+        <Footer />
       </div>
     </div>
   );
@@ -65,7 +81,7 @@ function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Link href={`/project/${id}`} className="block">
-      <div className="rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
+      <div className="mb-8 lg:mb-0 md:mb-0 rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
         <div className={`h-26 bg-gradient-to-r ${gradient}`} />
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-2">{title}</h2>
