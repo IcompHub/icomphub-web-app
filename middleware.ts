@@ -1,63 +1,35 @@
 import { MiddlewareConfig, NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = [
-  {
-    path: "/",
-    whenAuthenticated: "redirect",
-  },
-  {
-    path: "/login-user",
-    whenAuthenticated: "redirect",
-  },
-  {
-    path: "/sign-up",
-    whenAuthenticated: "redirect",
-  },
-  {
-    path: "/project",
-    whenAuthenticated: "next",
-  },
-] as const;
+const privateRoutes = [
+  "/project/create",
+  // Expressão regular para /project/[id]/edit
+  /^\/project\/[^\/]+\/edit$/,
+];
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/login-user";
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const publiRoute = publicRoutes.find((route) => route.path === path);
+
+  // Verifica se a rota é privada
+  const isPrivate = privateRoutes.some((route) =>
+    typeof route === "string" ? route === path : route.test(path)
+  );
 
   const authToken = request.cookies.get("token")?.value;
 
-  if (!authToken) {
-    if (publiRoute) return NextResponse.next();
-    else {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE;
-      return NextResponse.redirect(redirectUrl);
-    }
-  }
-
-  if (authToken && publiRoute && publiRoute.whenAuthenticated === "redirect") {
+  if (isPrivate && !authToken) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/";
+    redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE;
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (authToken && !publiRoute) {
-    // verificar se o token é válido
-
-    return NextResponse.next();
-  }
+  return NextResponse.next();
 }
 
 export const config: MiddlewareConfig = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    // Mantém a proteção para arquivos estáticos e API
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.[^/]+$).*)",
   ],
 };
