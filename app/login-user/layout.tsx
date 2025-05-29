@@ -1,5 +1,3 @@
-import Navbar from "@/components/general/navbar";
-
 export default function LayoutLogin({
   children,
 }: Readonly<{

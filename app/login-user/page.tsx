@@ -1,7 +1,6 @@
 "use client";
 
 import LoginForm, { loginSchema } from "@/components/user/login";
-import { useRouter } from "next/router";
 import { z } from "zod";
 
 export default function Login() {
