@@ -56,9 +56,9 @@ interface ProjectCardProps {
   gradient?: string;
 }
 
-function ProjectCard({ slug, name, data, gradient }: ProjectCardProps) {
+function ProjectCard({ id, slug, name, data, gradient }: ProjectCardProps) {
   return (
-    <Link href={`/project/${slug}`} className="block">
+    <Link href={`/project/${slug}-${id}`} className="block">
       <div className="mb-8 lg:mb-0 md:mb-0 rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
         <div className={`h-26 bg-gradient-to-r ${gradient}`} />
         <div className="p-6">
