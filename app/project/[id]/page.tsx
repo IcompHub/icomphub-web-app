@@ -6,6 +6,7 @@ import { TechnologiesCarousel } from "@/components/project/technologies-carousel
 import { MembersList } from "@/components/project/members-list";
 import { listarProjetoPorID } from "@/lib/api/project";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 export default async function ProjectPage(props: {
   params: Promise<{ id: string }>;
@@ -33,7 +34,9 @@ export default async function ProjectPage(props: {
       <div className="max-w-3xl mx-auto px-6 pb-16">
         <h1 className="text-3xl font-bold mt-6 mb-2 pb-2 border-b border-[#1a222f] flex items-center justify-between">
           {project.name}
-          <PenLine className="transition-colors cursor-pointer rounded border border-transparent hover:bg-white hover:border-[#1a222f] hover:text-[#1a222f] m-1" />
+          <Link href={`/project/${project.slug}-${id}/edit`}>
+            <PenLine className="transition-colors cursor-pointer rounded border border-transparent hover:bg-white hover:border-[#1a222f] hover:text-[#1a222f] m-1" />
+          </Link>
         </h1>
         <p className="text-[#64748b] mt-4 mb-8 text-sm">
           {project.data.description}

@@ -1,33 +1,28 @@
-"use client";
-import ProjectForm, { formSchema } from "@/components/ui/project-form";
-import * as z from "zod";
-function handleUpdate(values: z.infer<typeof formSchema>) {
-  console.log("edit");
-  console.log(values);
-  try {
-    // criarProjeto(values);
-  } catch (error) {
-    alert("Erro ao editar projeto");
-    console.error(error);
-  }
-}
+import ProjectForm from "@/components/ui/project-form";
+import { listarProjetoPorID } from "@/lib/api/project";
 
-export default function Home() {
+export default async function EditarProjeto(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
+  const idString = params.id.split("-").pop();
+  const id = Number(idString);
+
+  const project = await listarProjetoPorID(id);
+
+  if (!project) {
+    return <div>Projeto não encontrado</div>;
+  }
+
   return (
     <main className="p-6">
       <div className="max-w-md mx-auto bg-[#0e1116] rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-2">Editar Projeto</h1>
 
         <ProjectForm
-          initialData={{
-            name: "UniFood",
-            descricao: "Sistema de pedidos alimentícios na faculdade",
-            participantes: ["raquel", "luis"],
-            tecnologias: ["nextjs", "tailwind"],
-            url: "https://unifood.vercel.app",
-          }}
-          onSubmit={handleUpdate}
+          initialData={project}
           submitText="Salvar alterações"
+          onSubmit={() => console.log("aaaaa")}
         />
       </div>
     </main>

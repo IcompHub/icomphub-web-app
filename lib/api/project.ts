@@ -197,9 +197,10 @@ export async function criarProjeto(data: ProjetoPayload) {
   return res.data;
 }
 
-export async function atualizarProjeto(id: string | number, data: string[]) {
-  const res = await api.put(`/projects/${id}`, data);
-  return res.data;
+export async function atualizarProjeto(id: string | number, data: any) {
+  // const res = await api.put(`/projects/${id}`, data);
+  // return res.data;
+  console.log(data);
 }
 
 export async function listarProjetos() {
@@ -210,7 +211,7 @@ export async function listarProjetos() {
 export async function listarProjetoPorID(id: number) {
   const res = await api.get(`/projects/${id}`);
   // return projectData.find((p) => p.id === id);
-
+  console.log(res.data.data);
   return res.data.data;
 }
 

@@ -1,18 +1,15 @@
-import { GithubIcon, LinkedinIcon } from "lucide-react";
-import Link from "next/link";
-
 interface ParticipantsProps {
   // participants: UserProps[];
   participants: string[];
 }
 
-//temporario
-interface UserProps {
-  name: string;
-  role: string;
-  github: boolean;
-  linkedin: boolean;
-}
+// //temporario
+// interface UserProps {
+//   name: string;
+//   role: string;
+//   github: boolean;
+//   linkedin: boolean;
+// }
 
 export function MembersList({ participants }: ParticipantsProps) {
   return (

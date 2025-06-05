@@ -36,25 +36,44 @@ export const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 interface ProjectFormProps {
-  initialData?: Partial<FormData>;
+  initialData?: any;
   onSubmit: (data: FormData) => void;
   submitText?: string;
 }
-
+function handleUpdate(values: z.infer<typeof formSchema>) {
+  console.log("edit");
+  console.log(values);
+  try {
+    // criarProjeto(values);
+  } catch (error) {
+    alert("Erro ao editar projeto");
+    console.error(error);
+  }
+}
 export default function ProjectForm({
   initialData,
-  onSubmit,
   submitText = "Cadastrar",
+  onSubmit,
 }: ProjectFormProps) {
+  const mappedInitialData = initialData
+    ? {
+        name: initialData.name || "",
+        descricao: initialData.data?.description || "",
+        participantes: initialData.data?.participants || [],
+        tecnologias: initialData.data?.technologies || [],
+        url: initialData.data?.url || "",
+      }
+    : {
+        name: "",
+        descricao: "",
+        participantes: [],
+        tecnologias: [],
+        url: "",
+      };
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: initialData?.name || "",
-      descricao: initialData?.descricao || "",
-      participantes: initialData?.participantes || [],
-      tecnologias: initialData?.tecnologias || [],
-      url: initialData?.url || "",
-    },
+    defaultValues: mappedInitialData,
   });
 
   const participantesOptions = [
@@ -65,6 +84,7 @@ export default function ProjectForm({
     { value: "ana", label: "Ana Pereira" },
     { value: "bruno", label: "Bruno Costa" },
     { value: "julia", label: "Julia Ferreira" },
+    { value: "ismael", label: "Ismael Ferreira" },
   ];
 
   const tecnologiasOptions = [
