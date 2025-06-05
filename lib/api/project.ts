@@ -191,9 +191,10 @@ export async function atualizarProjeto(id: string | number, data: string[]) {
 }
 
 export async function listarProjetos() {
-  // const res = await api.get("/projects");
-  return projectData;
-  // return res.data;
+  const res = await api.get("/projects?pageNumber=1&pageSize=10");
+  console.log("res", res.data.data.items);
+
+  return res.data.data.items;
 }
 export async function listarProjetoPorID(id: string) {
   // const res = await api.get(`/projects/${id}`);
