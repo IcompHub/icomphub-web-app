@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { MultiCombobox } from "./combobox";
 
 export const formSchema = z.object({
-  nome: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Nome deve ter pelo menos 2 caracteres.",
   }),
   descricao: z.string().min(10, {
@@ -49,7 +49,7 @@ export default function ProjectForm({
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: initialData?.nome || "",
+      name: initialData?.name || "",
       descricao: initialData?.descricao || "",
       participantes: initialData?.participantes || [],
       tecnologias: initialData?.tecnologias || [],
@@ -83,7 +83,7 @@ export default function ProjectForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="nome"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>

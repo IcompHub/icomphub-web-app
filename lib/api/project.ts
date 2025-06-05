@@ -180,7 +180,19 @@ export const projectData = [
   },
 ];
 
-export async function criarProjeto(data: string[]) {
+export interface ProjetoPayload {
+  class_group_id: number;
+  data: {
+    description: string;
+    participants: string[];
+    technologies: string[];
+    url: string;
+  };
+  name: string;
+  slug: string;
+}
+export async function criarProjeto(data: ProjetoPayload) {
+  console.log(data);
   const res = await api.post("/projects", data);
   return res.data;
 }
