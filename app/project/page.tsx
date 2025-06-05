@@ -1,6 +1,7 @@
 import { Footer } from "@/components/project/footer";
 import { listarProjetos } from "@/lib/api/project";
 import ListProjects from "@/components/project/list-projects";
+import { ProjectPagination } from "@/components/project/project-pagination";
 
 export default async function ProjectsPage() {
   // const [search, setSearch] = useState("");
@@ -13,7 +14,7 @@ export default async function ProjectsPage() {
           <h1 className="text-3xl font-bold mb-2">Projetos</h1>
         </div>
         <ListProjects projetos={projetos} />
-
+        <ProjectPagination />
         <Footer />
       </div>
     </div>

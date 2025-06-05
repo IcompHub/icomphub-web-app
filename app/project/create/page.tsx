@@ -1,12 +1,36 @@
 "use client";
 import ProjectForm, { formSchema } from "@/components/ui/project-form";
 import { z } from "zod";
+import { criarProjeto, ProjetoPayload } from "@/lib/api/project";
 
-function handleCreate(values: z.infer<typeof formSchema>) {
-  console.log("create");
-  console.log(values);
+// Função utilitária para gerar o slug
+function generateSlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // remove caracteres especiais
+    .trim()
+    .replace(/\s+/g, "-"); // troca espaços por hífen
+}
+
+async function handleCreate(values: z.infer<typeof formSchema>) {
   try {
-    // criarProjeto(values);
+    const { name, descricao, participantes, tecnologias, url } = values;
+
+    const payload: ProjetoPayload = {
+      class_group_id: 0,
+      data: {
+        description: descricao,
+        participants: participantes,
+        technologies: tecnologias,
+        url: url,
+      },
+      name: name,
+      slug: generateSlug(name),
+    };
+
+    await criarProjeto(payload);
+    alert("Projeto cadastrado com sucesso!");
+    // Aqui você pode redirecionar ou limpar o formulário se quiser
   } catch (error) {
     alert("Erro ao criar projeto");
     console.error(error);

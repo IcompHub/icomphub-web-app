@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Badge } from "lucide-react";
-import { ProjectPagination } from "./project-pagination";
 import { Logo } from "../general/logo";
+import { Badge } from "../ui/badge";
 interface ListProjectsProps {
   projetos: ProjectCardProps[];
 }
@@ -21,14 +20,14 @@ export default function ListProjects({ projetos }: ListProjectsProps) {
               transition={{ type: "spring", stiffness: 80, damping: 15 }}
             >
               <ProjectCard
-                key={project.id}
                 id={project.id}
-                title={project.title}
+                key={project.id}
+                slug={project.slug}
+                name={project.name}
+                data={project.data}
                 gradient={project.gradient}
-                description={project.description}
-                technologies={project.technologies}
+                class_group_id={project.class_group_id}
               />
-              <ProjectPagination />
             </motion.div>
           ))}
         </div>
@@ -43,30 +42,31 @@ export default function ListProjects({ projetos }: ListProjectsProps) {
 }
 
 interface ProjectCardProps {
-  id: string;
-  title: string;
-  description: string;
-  gradient: string;
-  technologies: { name: string; icon: string }[];
+  id: number;
+  slug: string;
+  name: string;
+  status?: string;
+  data: {
+    description: string;
+    participants: string[];
+    technologies: string[];
+    url: string;
+  };
+  class_group_id: number;
+  gradient?: string;
 }
 
-function ProjectCard({
-  id,
-  title,
-  description,
-  gradient,
-  technologies,
-}: ProjectCardProps) {
+function ProjectCard({ slug, name, data, gradient }: ProjectCardProps) {
   return (
-    <Link href={`/project/${id}`} className="block">
+    <Link href={`/project/${slug}`} className="block">
       <div className="mb-8 lg:mb-0 md:mb-0 rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
         <div className={`h-26 bg-gradient-to-r ${gradient}`} />
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
-          <p className="text-[#64748b] mb-4 text-sm">{description}</p>
+          <h2 className="text-2xl font-bold mb-2">{name}</h2>
+          <p className="text-[#64748b] mb-4 text-sm">{data.description}</p>
           <div className="flex gap-2 w-fit">
-            {technologies.map((tech, i) => (
-              <TechTag key={i} tech={tech.name} />
+            {data.technologies.map((tech, i) => (
+              <TechTag key={i} tech={tech} />
             ))}
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function Home() {
 
         <ProjectForm
           initialData={{
-            nome: "UniFood",
+            name: "UniFood",
             descricao: "Sistema de pedidos alimentícios na faculdade",
             participantes: ["raquel", "luis"],
             tecnologias: ["nextjs", "tailwind"],
