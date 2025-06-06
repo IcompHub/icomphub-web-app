@@ -1,10 +1,8 @@
 "use client";
 
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
 import {
   Popover,
   PopoverContent,
@@ -26,33 +24,42 @@ type Option = {
   slug: string;
 };
 
+// 1. As props foram atualizadas:
+// - `value` e `onChange` foram removidos.
+// - `name` foi adicionado e é obrigatório.
+// - `defaultValue` foi adicionado para popular o estado inicial (útil em formulários de edição).
 interface MultiComboboxProps {
   options: Option[];
-  value: string[];
-  onChange: (value: string[]) => void;
+  name: string; // Essencial para o FormData
+  defaultValue?: string[];
   placeholder?: string;
   className?: string;
 }
 
 export default function MultiCombobox({
   options,
-  value,
-  onChange,
+  name,
+  defaultValue = [],
   placeholder = "Selecione opções...",
   className,
 }: MultiComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
+  // 2. O componente agora gerencia seu próprio estado para os valores selecionados.
+  const [selectedValues, setSelectedValues] =
+    React.useState<string[]>(defaultValue);
+
   const handleSelect = (currentValue: string) => {
-    if (value.includes(currentValue)) {
-      onChange(value.filter((v) => v !== currentValue));
+    // A lógica agora atualiza o estado interno, em vez de chamar um `onChange` externo.
+    if (selectedValues.includes(currentValue)) {
+      setSelectedValues(selectedValues.filter((v) => v !== currentValue));
     } else {
-      onChange([...value, currentValue]);
+      setSelectedValues([...selectedValues, currentValue]);
     }
   };
 
   const handleRemove = (val: string) => {
-    onChange(value.filter((v) => v !== val));
+    setSelectedValues(selectedValues.filter((v) => v !== val));
   };
 
   return (
@@ -78,9 +85,9 @@ export default function MultiCombobox({
             <CommandList>
               <CommandEmpty>Nenhuma opção encontrada.</CommandEmpty>
               <CommandGroup>
-                {options.map((option, index) => (
+                {options.map((option) => (
                   <CommandItem
-                    key={index}
+                    key={option.slug}
                     onSelect={() => handleSelect(option.slug)}
                     className="cursor-pointer text-[#f1f6fb] "
                   >
@@ -88,7 +95,8 @@ export default function MultiCombobox({
                     <Check
                       className={cn(
                         "ml-auto h-4 w-4",
-                        value.includes(option.slug)
+                        // Usa o estado interno `selectedValues` para verificar a seleção.
+                        selectedValues.includes(option.slug)
                           ? "opacity-100"
                           : "opacity-0"
                       )}
@@ -101,14 +109,14 @@ export default function MultiCombobox({
         </PopoverContent>
       </Popover>
 
-      {value.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2 p-2  bg-[#0f172a] border border-[#1a222f] rounded-md">
-          {value.map((val, index) => {
+      {/* Exibição das badges, usando o estado interno `selectedValues` */}
+      {selectedValues.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2 p-2 bg-[#0f172a] border border-[#1a222f] rounded-md">
+          {selectedValues.map((val) => {
             const label = options.find((opt) => opt.slug === val)?.name;
-
             return (
               <Badge
-                key={index}
+                key={val}
                 className="flex items-center gap-1 bg-[#1e293b] text-[#f1f6fb] border "
               >
                 {label}
@@ -124,6 +132,16 @@ export default function MultiCombobox({
           })}
         </div>
       )}
+
+      {/* 3. A MÁGICA ACONTECE AQUI:
+          Renderizamos inputs escondidos para cada valor selecionado.
+          O `FormData` do formulário pai irá coletar os dados desses inputs.
+      */}
+      <div className="hidden">
+        {selectedValues.map((val) => (
+          <input key={val} type="hidden" name={name} value={val} />
+        ))}
+      </div>
     </div>
   );
 }
