@@ -1,10 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -12,17 +19,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
+} from "./command";
 
 type Option = {
-  value: string;
-  label: string;
+  name: string;
+  slug: string;
 };
 
 interface MultiComboboxProps {
@@ -33,7 +34,7 @@ interface MultiComboboxProps {
   className?: string;
 }
 
-export function MultiCombobox({
+export default function MultiCombobox({
   options,
   value,
   onChange,
@@ -77,17 +78,17 @@ export function MultiCombobox({
             <CommandList>
               <CommandEmpty>Nenhuma opção encontrada.</CommandEmpty>
               <CommandGroup>
-                {options.map((option) => (
+                {options.map((option, index) => (
                   <CommandItem
-                    key={option.value}
-                    onSelect={() => handleSelect(option.value)}
+                    key={index}
+                    onSelect={() => handleSelect(option.slug)}
                     className="cursor-pointer text-[#f1f6fb] "
                   >
-                    {option.label}
+                    {option.name}
                     <Check
                       className={cn(
                         "ml-auto h-4 w-4",
-                        value.includes(option.value)
+                        value.includes(option.slug)
                           ? "opacity-100"
                           : "opacity-0"
                       )}
@@ -102,12 +103,12 @@ export function MultiCombobox({
 
       {value.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2 p-2  bg-[#0f172a] border border-[#1a222f] rounded-md">
-          {value.map((val) => {
-            const label = options.find((opt) => opt.value === val)?.label;
+          {value.map((val, index) => {
+            const label = options.find((opt) => opt.slug === val)?.name;
 
             return (
               <Badge
-                key={val}
+                key={index}
                 className="flex items-center gap-1 bg-[#1e293b] text-[#f1f6fb] border "
               >
                 {label}

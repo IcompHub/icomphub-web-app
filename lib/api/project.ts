@@ -192,9 +192,11 @@ export interface ProjetoPayload {
   slug: string;
 }
 export async function criarProjeto(data: ProjetoPayload) {
-  console.log(data);
-  const res = await api.post("/projects", data);
-  return res.data;
+  const res = await fetch("https://icomphub-api-devel.nelsul.com/projects", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return res.json();
 }
 
 export async function atualizarProjeto(data: any) {

@@ -1,19 +1,12 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { MultiCombobox } from "./combobox";
+
+import { criarProjeto, ProjetoPayload } from "@/lib/api/project";
+import MultiCombobox from "./combobox";
 
 export const formSchema = z.object({
   id: z.number().optional(),
@@ -38,163 +31,196 @@ type FormData = z.infer<typeof formSchema>;
 
 interface ProjectFormProps {
   initialData?: any;
-  onSubmit: (data: FormData) => void;
   submitText?: string;
+  technologies: any;
+}
+
+function generateSlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
 }
 
 export default function ProjectForm({
   initialData,
   submitText = "Cadastrar",
-  onSubmit,
+  technologies,
 }: ProjectFormProps) {
-  const mappedInitialData = initialData
-    ? {
-        id: initialData.id || "",
-        name: initialData.name || "",
-        descricao: initialData.data?.description || "",
-        participantes: initialData.data?.participants || [],
-        tecnologias: initialData.data?.technologies || [],
-        url: initialData.data?.url || "",
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const [formData, setFormData] = useState<FormData>(
+    initialData
+      ? {
+          id: initialData.id || "",
+          name: initialData.name || "",
+          descricao: initialData.data?.description || "",
+          participantes: initialData.data?.participants || [],
+          tecnologias: initialData.data?.technologies || [],
+          url: initialData.data?.url || "",
+        }
+      : {
+          name: "",
+          descricao: "",
+          participantes: [],
+          tecnologias: [],
+          url: "",
+        }
+  );
+
+  const participantesOptions = [
+    { slug: "raquel", name: "Raquel de Sá" },
+    { slug: "keren", name: "Keren Guimarães" },
+    { slug: "luis", name: "Luis Santos" },
+    { slug: "carlos", name: "Carlos Oliveira" },
+    { slug: "ana", name: "Ana Pereira" },
+    { slug: "bruno", name: "Bruno Costa" },
+    { slug: "julia", name: "Julia Ferreira" },
+    { slug: "ismael", name: "Ismael Ferreira" },
+  ];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleArrayChange = (name: string, value: string[]) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = (): boolean => {
+    try {
+      formSchema.parse(formData);
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path.length > 0) {
+            newErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(newErrors);
       }
-    : {
+      return false;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    try {
+      const { name, descricao, participantes, tecnologias, url } = formData;
+
+      const payload: ProjetoPayload = {
+        class_group_id: 0,
+        data: {
+          description: descricao,
+          participants: participantes,
+          technologies: tecnologias,
+          url: url,
+        },
+        name: name,
+        slug: generateSlug(name),
+      };
+
+      await criarProjeto(payload);
+      alert("Projeto cadastrado com sucesso!");
+      // Limpar o formulário após sucesso
+      setFormData({
         name: "",
         descricao: "",
         participantes: [],
         tecnologias: [],
         url: "",
-      };
-
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: mappedInitialData,
-  });
-
-  const participantesOptions = [
-    { value: "raquel", label: "Raquel de Sá" },
-    { value: "keren", label: "Keren Guimarães" },
-    { value: "luis", label: "Luis Santos" },
-    { value: "carlos", label: "Carlos Oliveira" },
-    { value: "ana", label: "Ana Pereira" },
-    { value: "bruno", label: "Bruno Costa" },
-    { value: "julia", label: "Julia Ferreira" },
-    { value: "ismael", label: "Ismael Ferreira" },
-  ];
-
-  const tecnologiasOptions = [
-    { value: "react", label: "React" },
-    { value: "nextjs", label: "Next.js" },
-    { value: "typescript", label: "TypeScript" },
-    { value: "tailwind", label: "Tailwind CSS" },
-    { value: "node", label: "Node.js" },
-    { value: "python", label: "Python" },
-    { value: "django", label: "Django" },
-    { value: "flutter", label: "Flutter" },
-  ];
+      });
+    } catch (error) {
+      alert("Erro ao criar projeto");
+      console.error(error);
+    }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label className="text-[#f1f6fb] font-medium block mb-2">Nome</label>
+        <Input
           name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite o nome do projeto" {...field} />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
+          placeholder="Digite o nome do projeto"
+          value={formData.name}
+          onChange={handleChange}
         />
+        {errors.name && <p className="text-red-500 mt-1">{errors.name}</p>}
+      </div>
 
-        <FormField
-          control={form.control}
+      <div>
+        <label className="text-[#f1f6fb] font-medium block mb-2">
+          Descrição
+        </label>
+        <Input
           name="descricao"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                Descrição
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Explique sobre o que é o projeto"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
+          placeholder="Explique sobre o que é o projeto"
+          value={formData.descricao}
+          onChange={handleChange}
         />
+        {errors.descricao && (
+          <p className="text-red-500 mt-1">{errors.descricao}</p>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="participantes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                Participantes
-              </FormLabel>
-              <FormControl>
-                <MultiCombobox
-                  placeholder="Digite o nome dos integrantes"
-                  options={participantesOptions}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
+      <div>
+        <label className="text-[#f1f6fb] font-medium block mb-2">
+          Participantes
+        </label>
+        <MultiCombobox
+          placeholder="Digite o nome dos integrantes"
+          options={participantesOptions}
+          value={formData.participantes}
+          onChange={(value) => handleArrayChange("participantes", value)}
         />
+        {errors.participantes && (
+          <p className="text-red-500 mt-1">{errors.participantes}</p>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="tecnologias"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                Tecnologias
-              </FormLabel>
-              <FormControl>
-                <MultiCombobox
-                  placeholder="Digite as tecnologias utilizadas"
-                  options={tecnologiasOptions}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
+      <div>
+        <label className="text-[#f1f6fb] font-medium block mb-2">
+          Tecnologias
+        </label>
+        <MultiCombobox
+          placeholder="Digite as tecnologias utilizadas"
+          options={technologies}
+          value={formData.tecnologias}
+          onChange={(value) => handleArrayChange("tecnologias", value)}
         />
+        {errors.tecnologias && (
+          <p className="text-red-500 mt-1">{errors.tecnologias}</p>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
+      <div>
+        <label className="text-[#f1f6fb] font-medium block mb-2">
+          URL do projeto
+        </label>
+        <Input
           name="url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                URL do projeto
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Digite onde o site está hospedado"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
+          placeholder="Digite onde o site está hospedado"
+          value={formData.url}
+          onChange={handleChange}
         />
+        {errors.url && <p className="text-red-500 mt-1">{errors.url}</p>}
+      </div>
 
-        <Button
-          type="submit"
-          className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
-        >
-          {submitText}
-        </Button>
-      </form>
-    </Form>
+      <Button
+        type="submit"
+        className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
+      >
+        {submitText}
+      </Button>
+    </form>
   );
 }
