@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { MultiCombobox } from "./combobox";
 
 export const formSchema = z.object({
+  id: z.number().optional(),
   name: z.string().min(2, {
     message: "Nome deve ter pelo menos 2 caracteres.",
   }),
@@ -40,16 +41,7 @@ interface ProjectFormProps {
   onSubmit: (data: FormData) => void;
   submitText?: string;
 }
-function handleUpdate(values: z.infer<typeof formSchema>) {
-  console.log("edit");
-  console.log(values);
-  try {
-    // criarProjeto(values);
-  } catch (error) {
-    alert("Erro ao editar projeto");
-    console.error(error);
-  }
-}
+
 export default function ProjectForm({
   initialData,
   submitText = "Cadastrar",
@@ -57,6 +49,7 @@ export default function ProjectForm({
 }: ProjectFormProps) {
   const mappedInitialData = initialData
     ? {
+        id: initialData.id || "",
         name: initialData.name || "",
         descricao: initialData.data?.description || "",
         participantes: initialData.data?.participants || [],

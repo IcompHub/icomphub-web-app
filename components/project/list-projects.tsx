@@ -25,7 +25,6 @@ export default function ListProjects({ projetos }: ListProjectsProps) {
                 slug={project.slug}
                 name={project.name}
                 data={project.data}
-                gradient={project.gradient}
                 class_group_id={project.class_group_id}
               />
             </motion.div>
@@ -51,16 +50,16 @@ interface ProjectCardProps {
     participants: string[];
     technologies: string[];
     url: string;
+    gradient?: string;
   };
   class_group_id: number;
-  gradient?: string;
 }
 
-function ProjectCard({ id, slug, name, data, gradient }: ProjectCardProps) {
+function ProjectCard({ id, slug, name, data }: ProjectCardProps) {
   return (
     <Link href={`/project/${slug}-${id}`} className="block">
       <div className="mb-8 lg:mb-0 md:mb-0 rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
-        <div className={`h-26 bg-gradient-to-r ${gradient}`} />
+        <div className={`h-26 bg-gradient-to-r ${data.gradient}`} />
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-2">{name}</h2>
           <p className="text-[#64748b] mb-4 text-sm">{data.description}</p>

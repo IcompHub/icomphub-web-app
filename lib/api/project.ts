@@ -197,10 +197,10 @@ export async function criarProjeto(data: ProjetoPayload) {
   return res.data;
 }
 
-export async function atualizarProjeto(id: string | number, data: any) {
-  // const res = await api.put(`/projects/${id}`, data);
+export async function atualizarProjeto(data: any) {
+  // const res = await api.put(`/projects/${data.id}`, data);
   // return res.data;
-  console.log(data);
+  console.log(data.id);
 }
 
 export async function listarProjetos() {

@@ -29,7 +29,9 @@ export default async function ProjectPage(props: {
         id={project.id}
       />
 
-      <div className={`h-48 bg-gradient-to-r ${project.gradient}`} />
+      <div
+        className={`h-48 bg-gradient-to-r ${project.data.gradient} max-w-3xl mx-auto`}
+      />
 
       <div className="max-w-3xl mx-auto px-6 pb-16">
         <h1 className="text-3xl font-bold mt-6 mb-2 pb-2 border-b border-[#1a222f] flex items-center justify-between">
