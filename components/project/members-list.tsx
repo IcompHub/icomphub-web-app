@@ -1,28 +1,26 @@
-import { GithubIcon, LinkedinIcon } from "lucide-react";
-import Link from "next/link";
-
 interface ParticipantsProps {
-  participants: UserProps[];
+  // participants: UserProps[];
+  participants: string[];
 }
 
-//temporario
-interface UserProps {
-  name: string;
-  role: string;
-  github: boolean;
-  linkedin: boolean;
-}
+// //temporario
+// interface UserProps {
+//   name: string;
+//   role: string;
+//   github: boolean;
+//   linkedin: boolean;
+// }
 
 export function MembersList({ participants }: ParticipantsProps) {
   return (
     <div className="space-y-2 mb-8">
-      {participants.map((participant, index) => (
+      {participants.map((participant: string, index: number) => (
         <div
           key={index}
           className="flex items-center justify-between p-2.5 bg-[#080D17] rounded-lg border border-[#1A222F]"
         >
-          <div className="font-medium">{participant.name}</div>
-          <div className="flex items-center">
+          <div className="font-medium">{participant}</div>
+          {/* <div className="flex items-center">
             <span className="text-[#64748b] text-sm mr-4">
               {participant.role}
             </span>
@@ -38,7 +36,7 @@ export function MembersList({ participants }: ParticipantsProps) {
                 </Link>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       ))}
     </div>

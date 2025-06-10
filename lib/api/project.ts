@@ -180,25 +180,42 @@ export const projectData = [
   },
 ];
 
-export async function criarProjeto(data: string[]) {
+export interface ProjetoPayload {
+  class_group_id: number;
+  data: {
+    description: string;
+    participants: string[];
+    technologies: string[];
+    url: string;
+  };
+  name: string;
+  slug: string;
+}
+export async function criarProjeto(data: ProjetoPayload) {
+  console.log(data);
+
   const res = await api.post("/projects", data);
+
   return res.data;
 }
 
-export async function atualizarProjeto(id: string | number, data: string[]) {
+export async function atualizarProjeto(id: number, data: any) {
+  console.log(id);
   const res = await api.put(`/projects/${id}`, data);
+  console.log(res);
   return res.data;
 }
 
 export async function listarProjetos() {
-  // const res = await api.get("/projects");
-  return projectData;
-  // return res.data;
+  const res = await api.get("/projects?pageNumber=1&pageSize=10");
+
+  return res.data.data.items;
 }
-export async function listarProjetoPorID(id: string) {
-  // const res = await api.get(`/projects/${id}`);
-  return projectData.find((p) => p.id === id);
-  // return res.data;
+export async function listarProjetoPorID(id: number) {
+  const res = await api.get(`/projects/${id}`);
+  // return projectData.find((p) => p.id === id);
+  console.log(res.data.data);
+  return res.data.data;
 }
 
 export async function buscarProjetoPorId(id: string | number) {

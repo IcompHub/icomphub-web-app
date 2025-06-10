@@ -1,19 +1,10 @@
-"use client";
-import ProjectForm, { formSchema } from "@/components/ui/project-form";
-import { z } from "zod";
+import ProjectForm from "@/components/ui/project-form";
 
-function handleCreate(values: z.infer<typeof formSchema>) {
-  console.log("create");
-  console.log(values);
-  try {
-    // criarProjeto(values);
-  } catch (error) {
-    alert("Erro ao criar projeto");
-    console.error(error);
-  }
-}
+import { listarTechnologies } from "@/lib/api/technologies";
 
-export default function Home() {
+export default async function Home() {
+  const technologies = await listarTechnologies();
+
   return (
     <main className="p-6">
       <div className="max-w-md mx-auto bg-[#0e1116] rounded-lg p-8">
@@ -22,7 +13,7 @@ export default function Home() {
           Queremos saber um pouco do seu projeto :)
         </p>
 
-        <ProjectForm onSubmit={handleCreate} submitText="Cadastrar" />
+        <ProjectForm submitText="Cadastrar" technologies={technologies} />
       </div>
     </main>
   );

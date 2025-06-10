@@ -8,9 +8,11 @@ import {
 
 interface BreadcrumbProps {
   title: string;
+  slug: string;
+  id: number;
 }
 
-export function ProjectBreadcrumb({ title }: BreadcrumbProps) {
+export function ProjectBreadcrumb({ title, slug, id }: BreadcrumbProps) {
   return (
     <Breadcrumb className="max-w-3xl p-6 mx-auto text-[#64748b] ">
       <BreadcrumbList>
@@ -20,7 +22,9 @@ export function ProjectBreadcrumb({ title }: BreadcrumbProps) {
         <BreadcrumbSeparator className="text-[#64748b]" />
 
         <BreadcrumbItem>
-          <BreadcrumbLink href="/project">{title}</BreadcrumbLink>
+          <BreadcrumbLink href={`/project/${slug}-${id}`}>
+            {title}
+          </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
