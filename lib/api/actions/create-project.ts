@@ -67,8 +67,8 @@ export async function createProjectAction(
   }
 
   // Em caso de sucesso, limpe o cache e redirecione (ou retorne uma mensagem de sucesso)
-  revalidatePath("/projects"); // Exemplo de caminho para revalidar
-  redirect("/projects"); // Exemplo de redirecionamento pós-sucesso
+  revalidatePath("/project"); // Exemplo de caminho para revalidar
+  redirect("/project"); // Exemplo de redirecionamento pós-sucesso
 
   // Alternativamente, se não quiser redirecionar:
   // return { message: "Projeto criado com sucesso!" };

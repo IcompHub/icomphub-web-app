@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import MultiCombobox from "./combobox";
 import { createProjectAction } from "@/lib/api/actions/create-project";
 import { ProjectFormState } from "@/lib/definitions";
+import { editProjectAction } from "@/lib/api/actions/edit-project";
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -60,15 +61,45 @@ export default function ProjectForm({
   technologies,
 }: ProjectFormProps) {
   const initialState: ProjectFormState = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createProjectAction, initialState);
+  const [state, formActionCreate] = useActionState(
+    createProjectAction,
+    initialState
+  );
+  const [stateUpdate, formActionUpdate] = useActionState(
+    editProjectAction,
+    initialState
+  );
+
+  const mappedInitialData = initialData
+    ? {
+        id: initialData.id?.toString() ?? "",
+        name: initialData.name ?? "",
+        descricao: initialData.data?.description ?? "",
+        participantes: initialData.data?.participants ?? [],
+        tecnologias: initialData.data?.technologies ?? [],
+        url: initialData.data?.url ?? "",
+      }
+    : {
+        id: "",
+        name: "",
+        descricao: "",
+        participantes: [],
+        tecnologias: [],
+        url: "",
+      };
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form
+      action={submitText === "Cadastrar" ? formActionCreate : formActionUpdate}
+      className="space-y-6"
+    >
+      <input type="hidden" name="id" value={mappedInitialData.id} />
       <div>
         <label className="text-[#f1f6fb] font-medium block mb-2">Nome</label>
         <Input
           name="name"
           placeholder="Digite o nome do projeto"
+          defaultValue={mappedInitialData.name}
           // value={formData.name}
           // onChange={handleChange}
         />
@@ -88,6 +119,7 @@ export default function ProjectForm({
         <Input
           name="descricao"
           placeholder="Explique sobre o que é o projeto"
+          defaultValue={mappedInitialData.descricao}
           // value={formData.descricao}
           // onChange={handleChange}
         />
@@ -108,6 +140,7 @@ export default function ProjectForm({
           name="participantes"
           placeholder="Digite o nome dos integrantes"
           options={participantesOptions}
+          defaultValue={mappedInitialData.participantes}
           // value={formData.participantes}
           // onChange={(value) => handleArrayChange("participantes", value)}
         />
@@ -128,8 +161,7 @@ export default function ProjectForm({
           name="tecnologias"
           placeholder="Digite as tecnologias utilizadas"
           options={technologies}
-          // value={formData.tecnologias}
-          // onChange={(value) => handleArrayChange("tecnologias", value)}
+          defaultValue={mappedInitialData.tecnologias}
         />
         {state.errors?.tecnologias && (
           <div className="text-red-500 mt-1">
@@ -147,6 +179,7 @@ export default function ProjectForm({
         <Input
           name="url"
           placeholder="Digite onde o site está hospedado"
+          defaultValue={mappedInitialData.url}
           // value={formData.url}
           // onChange={handleChange}
         />
