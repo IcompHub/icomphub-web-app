@@ -3,6 +3,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Logo } from "../general/logo";
 import { Badge } from "../ui/badge";
+
+
+const gradients = [
+  "from-pink-500 via-red-500 to-yellow-500",
+  "from-cyan-400 to-green-400",
+  "from-blue-400 to-purple-400",
+  "from-blue-800 to-blue-400",
+  "from-pink-700 to-pink-300",
+];
+
 interface ListProjectsProps {
   projetos: ProjectCardProps[];
 }
@@ -21,11 +31,12 @@ export default function ListProjects({ projetos }: ListProjectsProps) {
             >
               <ProjectCard
                 id={project.id}
-                key={project.id}
                 slug={project.slug}
                 name={project.name}
                 data={project.data}
                 class_group_id={project.class_group_id}
+                
+                gradient={gradients[i % gradients.length]}
               />
             </motion.div>
           ))}
@@ -50,21 +61,23 @@ interface ProjectCardProps {
     participants: string[];
     technologies: string[];
     url: string;
-    gradient?: string;
   };
   class_group_id: number;
+  // Adiciona a prop 'gradient'
+  gradient: string;
 }
 
-function ProjectCard({ id, slug, name, data }: ProjectCardProps) {
+function ProjectCard({ id, slug, name, data, gradient }: ProjectCardProps) {
   return (
     <Link href={`/project/${slug}-${id}`} className="block">
       <div className="mb-8 lg:mb-0 md:mb-0 rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
-        <div className={`h-26 bg-gradient-to-r ${data.gradient}`} />
+        {/* Usa a nova prop 'gradient' para definir a cor */}
+        <div className={`h-26 bg-gradient-to-r ${gradient}`} />
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-2">{name}</h2>
           <p className="text-[#64748b] mb-4 text-sm">{data.description}</p>
           <div className="flex gap-2 w-fit">
-            {data.technologies.map((tech, i) => (
+            {data?.technologies?.map((tech, i) => (
               <TechTag key={i} tech={tech} />
             ))}
           </div>
@@ -77,7 +90,7 @@ function ProjectCard({ id, slug, name, data }: ProjectCardProps) {
 function TechTag({ tech }: { tech: string }) {
   return (
     <Badge className="px-2 py-1.5 rounded-full bg-transparent border border-[#F1F5F9] text-sm ">
-      {tech}
+      {`batata`}
     </Badge>
   );
 }
