@@ -180,18 +180,39 @@ export const projectData = [
   },
 ];
 
-export interface ProjetoPayload {
-  class_group_id: number;
-  data: {
-    description: string;
-    participants: string[];
-    technologies: string[];
-    url: string;
-  };
-  name: string;
+
+
+export interface Technology {
+  id: number;
   slug: string;
+  name: string;
 }
-export async function criarProjeto(data: ProjetoPayload) {
+
+export interface ProjectDetails {
+  description: string;
+  repository_url: string;
+  title: string;
+}
+
+export interface Project {
+  id: number;
+  slug: string;
+  name: string;
+  status: string; 
+  data: ProjectDetails; 
+  class_group_id: number;
+  technologies: Technology[];
+}
+
+export interface PaginatedProjectsResponse {
+  total_items: number;
+  total_pages: number;
+  page_number: number;
+  page_size: number;
+  items: Project[];
+}
+
+export async function criarProjeto(data: Project) {
   console.log(data);
 
   const res = await api.post("/projects", data);
@@ -206,8 +227,8 @@ export async function atualizarProjeto(id: number, data: any) {
   return res.data;
 }
 
-export async function listarProjetos() {
-  const res = await api.get("/projects?pageNumber=1&pageSize=10");
+export async function listarProjetos(): Promise<Project[]> {
+  const res = await api.get<{ data: PaginatedProjectsResponse }>("/projects?pageNumber=1&pageSize=10");
 
   return res.data.data.items;
 }
