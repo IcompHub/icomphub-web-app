@@ -250,8 +250,8 @@ export interface Members{
   id: number;
   nickname: string;
   status: string;
-  user: User[];
-  role: Role[];
+  user: User;
+  role: Role;
 }
 
 export interface ProjectDetailsDTO{
@@ -269,7 +269,7 @@ export interface ProjectDetailsDTO{
 export async function listarProjetoPorID(id: number) {
 
   const res = await api.get(`/projects/${id}`);
-  const projects: ProjectDetailsDTO = res.data; 
+  const projects: ProjectDetailsDTO = res.data.data; 
 
   // return projectData.find((p) => p.id === id);
   //console.log(res.data.data);
