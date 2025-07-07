@@ -1,4 +1,6 @@
-"use client";
+import { Technology } from "@/lib/api/project";
+
+//"use client";
 
 import {
   Carousel,
@@ -10,26 +12,31 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 interface TechnologiesCarouselProps {
-  technologies: { name: string }[];
+  technologies?: Technology[];
 }
 
 export function TechnologiesCarousel({
   technologies,
 }: TechnologiesCarouselProps) {
+
+  if (!technologies || technologies.length === 0) {
+    return <div className="mb-8">Nenhum tecnologia encontrada.</div>;
+  }
+
   return (
     <div className="mb-8">
       <h2 className="text-xl font-bold mb-4 text-[#f1f6fb]">Tecnologias</h2>
 
       <Carousel opts={{ align: "start" }} className="w-full">
         <CarouselContent>
-          {technologies.map((tech, index) => (
-            <CarouselItem key={index} className="basis-1/3 shrink-0 px-1">
+          {technologies.map((name, id) => (
+            <CarouselItem key={id} className="basis-1/3 shrink-0 px-1">
               <Card className="bg-transparent border-[#1a222f] text-[#f1f6fb]">
                 <CardContent className="flex flex-col items-center justify-center py-4 px-2">
                   <div className="h-10 mb-2 flex items-center justify-center">
-                    <TechIcon name={tech.name} />
+                    <TechIcon name={name.name} />
                   </div>
-                  <span className="text-xs text-center">{tech.name}</span>
+                  <span className="text-xs text-center">{name.name}</span>
                 </CardContent>
               </Card>
             </CarouselItem>

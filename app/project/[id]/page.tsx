@@ -8,15 +8,17 @@ import { listarProjetoPorID } from "@/lib/api/project";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
+
 export default async function ProjectPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
   // Extrai apenas o id numérico do formato "${slug}-${id}"
-  console.log(params);
   const idString = params.id.split("-").pop();
   const id = Number(idString);
+  console.log("teste: ", idString)
   const project = await listarProjetoPorID(id);
+  console.log("teste1: ", project)
   if (!project) {
     notFound();
   }
@@ -30,7 +32,7 @@ export default async function ProjectPage(props: {
       />
 
       <div
-        className={`h-48 bg-gradient-to-r ${project.data.gradient} max-w-3xl mx-auto`}
+        className={`h-48 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 max-w-3xl mx-auto`}
       />
 
       <div className="max-w-3xl mx-auto px-6 pb-16">
@@ -45,9 +47,9 @@ export default async function ProjectPage(props: {
         </p>
 
         <h2 className="text-xl font-bold mb-4">Participantes</h2>
-        <MembersList participants={project.data.participants} />
+        <MembersList participants={project.members} />
 
-        <TechnologiesCarousel technologies={project.data.technologies} />
+        <TechnologiesCarousel technologies={project.technologies} />
 
         <h2 className="text-xl font-bold mb-4">README.md</h2>
         <div className="bg-[#080D17] rounded-lg p-4 mb-12 flex justify-center items-center h-16 border border-[#1A222F]">

@@ -232,11 +232,48 @@ export async function listarProjetos(): Promise<Project[]> {
 
   return res.data.data.items;
 }
+
+export interface Role{
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export interface User{
+  id: number;
+  slug: string;
+  nickname: string;
+  full_name: string;
+}
+
+export interface Members{
+  id: number;
+  nickname: string;
+  status: string;
+  user: User[];
+  role: Role[];
+}
+
+export interface ProjectDetailsDTO{
+  id: number;
+  slug: string;
+  name: string;
+  status: string; 
+  data: ProjectDetails; 
+  class_group_id?: number;
+  technologies: Technology[];
+  members: Members[];
+
+} 
+
 export async function listarProjetoPorID(id: number) {
+
   const res = await api.get(`/projects/${id}`);
+  const projects: ProjectDetailsDTO = res.data; 
+
   // return projectData.find((p) => p.id === id);
-  console.log(res.data.data);
-  return res.data.data;
+  //console.log(res.data.data);
+  return projects;
 }
 
 export async function buscarProjetoPorId(id: string | number) {
