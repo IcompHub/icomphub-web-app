@@ -18,6 +18,9 @@ export const loginSchema = z.object({
   nome: z.string().min(2, {
     message: "Nome deve ter pelo menos 2 caracteres.",
   }),
+  email: z.string().email().min(2, {
+    message: "Email",
+  }),
   password: z.string().min(4, {
     message: "Senha deve ter pelo menos 4 caracteres.",
   }),
@@ -44,6 +47,7 @@ export default function SignUpForm({
   const form = useForm<FormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
+      email: initialData?.email || "",
       nome: initialData?.nome || "",
       password: initialData?.password || "",
     },
@@ -60,6 +64,21 @@ export default function SignUpForm({
               <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>
               <FormControl>
                 <Input placeholder="Nome de usuário" {...field} />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-[#f1f6fb] font-medium">
+                Email
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Email de acesso" {...field} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
