@@ -1,19 +1,8 @@
 "use client";
 
-import { loginSchema } from "@/components/user/login";
 import SignUpForm from "@/components/user/sign-up";
-import { z } from "zod";
 
-function handleSignUp(values: z.infer<typeof loginSchema>) {
-  console.log("criar conta");
-  console.log(values);
-  try {
-    // criarProjeto(values);
-  } catch (error) {
-    alert("Erro ao criar conta");
-    console.error(error);
-  }
-}
+
 
 export default function SignUp() {
   return (
@@ -24,7 +13,7 @@ export default function SignUp() {
           Informe seus dados para poder cadastrar seus projetos!
         </p>
 
-        <SignUpForm onSubmit={handleSignUp} />
+        <SignUpForm  />
       </div>
     </main>
   );
