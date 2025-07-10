@@ -71,7 +71,7 @@ export type SignUpFormState = {
 };
 
 export default function SignUpForm({ initialData }: ProjectFormProps) {
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
   const form = useForm<FormData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -89,18 +89,19 @@ export default function SignUpForm({ initialData }: ProjectFormProps) {
   });
 
   async function onSubmit(data: FormData) {
-    startTransition(async () => {
-      // Cria um objeto FormData a partir dos valores do formulário
-      const formData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      const result = await signUpAction({}, formData);
-      if (result.errors) {
-        console.log(result.errors);
-      }
+    // startTransition(async () => {
+    // Cria um objeto FormData a partir dos valores do formulário
+  
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
     });
+
+    const result = await signUpAction({}, formData);
+    if (result.errors) {
+      console.log(result.errors);
+    }
+    // });
   }
 
   return (
