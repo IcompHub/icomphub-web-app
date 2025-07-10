@@ -3,9 +3,12 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { criarProjeto, ProjetoPayload } from "@/lib/api/project"; // Mantenha sua função de API
-import { formSchema, State } from "@/components/ui/project-form";
-import { ProjectFormSchema, ProjectFormState } from "@/lib/definitions";
+import { criarProjeto } from "@/lib/api/project"; // Mantenha sua função de API
+import {
+  ProjectFormSchema,
+  ProjectFormState,
+  ProjetoPayload,
+} from "@/lib/definitions";
 import { generateSlug } from "@/lib/utils";
 
 // 3. Crie a Server Action
