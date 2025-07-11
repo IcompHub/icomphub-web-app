@@ -91,7 +91,7 @@ export default function SignUpForm({ initialData }: ProjectFormProps) {
   async function onSubmit(data: FormData) {
     // startTransition(async () => {
     // Cria um objeto FormData a partir dos valores do formulário
-  
+
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
@@ -255,7 +255,6 @@ export default function SignUpForm({ initialData }: ProjectFormProps) {
         <Button
           type="submit"
           className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
-          disabled={isPending}
         >
           Cadastrar
         </Button>

@@ -36,7 +36,7 @@ export async function criarTechnology(data: TechnologyPayload) {
   return res.data;
 }
 
-export async function atualizarTechnology(data: Technology) {
+export async function atualizarTechnology(data: any) {
   const newData = {
     ...data,
     slug: generateSlug(data.name),
