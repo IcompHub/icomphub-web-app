@@ -1,4 +1,4 @@
-import TechnologyForm from "@/components/technoogies/technologies-form";
+import EditTechnology from "@/components/technoogies/edit-tech";
 
 import { listarTechnologyPorID } from "@/lib/api/technologies";
 
@@ -20,11 +20,7 @@ export default async function EditarTecnologia(props: {
       <div className="max-w-md mx-auto bg-[#0e1116] rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-2">Editar Tecnologia</h1>
 
-        {/* <EditProject project={project} technologies={technologies} /> */}
-        <TechnologyForm
-          submitText="Salvar alterações"
-          initialData={tecnologia}
-        />
+        <EditTechnology tecnologia={tecnologia} />
       </div>
     </main>
   );

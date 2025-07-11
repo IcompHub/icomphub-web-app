@@ -36,10 +36,13 @@ export async function criarTechnology(data: TechnologyPayload) {
   return res.data;
 }
 
-export async function atualizarTechnology(data: TechnologyPayload) {
-  console.log(data);
-  // const res = await api.put(`/technologies/${data.id}`, data);
-  // return res.data;
+export async function atualizarTechnology(data: Technology) {
+  const newData = {
+    ...data,
+    slug: generateSlug(data.name),
+  };
+  const res = await api.put(`/technologies/${data.id}`, newData);
+  return res.data;
 }
 
 export async function listarTechnologies() {
