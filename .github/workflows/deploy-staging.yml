@@ -15,7 +15,8 @@ jobs:
 
       - name: Build the Docker Image
         run: |
-          docker build . --file Dockerfile --tag icomphub-web-app-staging:latest
+          docker build . --file Dockerfile --tag icomphub-web-app-staging:latest \
+          --build-arg NEXT_PUBLIC_API_URL=${{ vars.API_URL_FULL_STAGING }}
 
       - name: Save Docker Image as .tar
         run: |

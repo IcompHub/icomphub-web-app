@@ -4,6 +4,12 @@
 
 FROM node:18-alpine AS base
 
+# Accept build-time arguments
+ARG NEXT_PUBLIC_API_URL
+
+# Set them as env vars inside the image
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
