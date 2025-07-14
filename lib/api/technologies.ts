@@ -1,3 +1,4 @@
+import { generateSlug } from "../utils";
 import api from "./axios";
 
 // Mock de dados para desenvolvimento local (opcional)
@@ -19,29 +20,40 @@ export interface TechnologyPayload {
 }
 
 export interface Technology extends TechnologyPayload {
-  id: number;
+  id?: number;
+  name: string;
+  slug?: string;
 }
 
 // CRUD
 
 export async function criarTechnology(data: TechnologyPayload) {
-  const res = await api.post("/technologies", data);
+  const newData = {
+    ...data,
+    slug: generateSlug(data.name),
+  };
+  const res = await api.post("/technologies", newData);
   return res.data;
 }
 
-export async function atualizarTechnology(id: number, data: TechnologyPayload) {
-  const res = await api.put(`/technologies/${id}`, data);
+export async function atualizarTechnology(data: any) {
+  const newData = {
+    ...data,
+    slug: generateSlug(data.name),
+  };
+  const res = await api.put(`/technologies/${data.id}`, newData);
   return res.data;
 }
 
 export async function listarTechnologies() {
   const res = await api.get("/technologies?pageNumber=1&pageSize=10");
-  console.log(res.data);
+
   return res.data.data.items;
 }
 
 export async function listarTechnologyPorID(id: number) {
   const res = await api.get(`/technologies/${id}`);
+  console.log(res.data.data);
   return res.data.data;
 }
 

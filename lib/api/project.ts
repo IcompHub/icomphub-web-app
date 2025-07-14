@@ -1,4 +1,5 @@
 // lib/api/projects.ts
+import { ProjetoPayload } from "../definitions";
 import api from "./axios";
 
 export const projectData = [
@@ -180,17 +181,36 @@ export const projectData = [
   },
 ];
 
-export interface ProjetoPayload {
-  class_group_id: number;
-  data: {
-    description: string;
-    participants: string[];
-    technologies: string[];
-    url: string;
-  };
-  name: string;
+export interface Technology {
+  id: number;
   slug: string;
+  name: string;
 }
+
+export interface ProjectDetails {
+  description: string;
+  repository_url: string;
+  title: string;
+}
+
+export interface Project {
+  id: number;
+  slug: string;
+  name: string;
+  status: string;
+  data: ProjectDetails;
+  class_group_id: number;
+  technologies: Technology[];
+}
+
+export interface PaginatedProjectsResponse {
+  total_items: number;
+  total_pages: number;
+  page_number: number;
+  page_size: number;
+  items: Project[];
+}
+
 export async function criarProjeto(data: ProjetoPayload) {
   console.log(data);
 
@@ -206,16 +226,53 @@ export async function atualizarProjeto(id: number, data: any) {
   return res.data;
 }
 
-export async function listarProjetos() {
-  const res = await api.get("/projects?pageNumber=1&pageSize=10");
+export async function listarProjetos(): Promise<Project[]> {
+  const res = await api.get<{ data: PaginatedProjectsResponse }>(
+    "/projects?pageNumber=1&pageSize=10"
+  );
 
   return res.data.data.items;
 }
+
+export interface Role {
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export interface User {
+  id: number;
+  slug: string;
+  nickname: string;
+  full_name: string;
+}
+
+export interface Members {
+  id: number;
+  nickname: string;
+  status: string;
+  user: User;
+  role: Role;
+}
+
+export interface ProjectDetailsDTO {
+  id: number;
+  slug: string;
+  name: string;
+  status: string;
+  data: ProjectDetails;
+  class_group_id?: number;
+  technologies: Technology[];
+  members: Members[];
+}
+
 export async function listarProjetoPorID(id: number) {
   const res = await api.get(`/projects/${id}`);
+  const projects: ProjectDetailsDTO = res.data.data;
+
   // return projectData.find((p) => p.id === id);
-  console.log(res.data.data);
-  return res.data.data;
+  //console.log(res.data.data);
+  return projects;
 }
 
 export async function buscarProjetoPorId(id: string | number) {

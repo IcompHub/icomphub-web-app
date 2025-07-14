@@ -1,23 +1,6 @@
-"use client";
-
-import LoginForm, { loginSchema } from "@/components/user/login";
-import { z } from "zod";
+import LoginForm from "@/components/user/login";
 
 export default function Login() {
-  // const router = useRouter();
-
-  function handleLogin(values: z.infer<typeof loginSchema>) {
-    try {
-      console.log("entrar");
-      console.log(values);
-      // Simular login bem-sucedido
-      // router.push("/projects");
-    } catch (error) {
-      alert("Erro ao logar");
-      console.error(error);
-    }
-  }
-
   return (
     <main className="p-6">
       <div className="max-w-md mx-auto bg-[#0e1116] rounded-lg p-8">
@@ -26,7 +9,7 @@ export default function Login() {
           Seja bem-vind_ de volta ao IcompHub!
         </p>
 
-        <LoginForm onSubmit={handleLogin} />
+        <LoginForm />
       </div>
     </main>
   );

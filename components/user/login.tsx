@@ -1,92 +1,88 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-
+import { useActionState } from "react";
+import { loginAction } from "@/lib/api/actions/login-user";
+import { z } from "zod";
 export const loginSchema = z.object({
-  nome: z.string().min(2, {
-    message: "Nome deve ter pelo menos 2 caracteres.",
+  email: z.string().min(2, {
+    message: "Email deve ter pelo menos 2 caracteres.",
   }),
   password: z.string().min(4, {
     message: "Senha deve ter pelo menos 4 caracteres.",
   }),
 });
+export type FormData = z.infer<typeof loginSchema>;
 
-type FormData = z.infer<typeof loginSchema>;
-
-interface ProjectFormProps {
-  initialData?: Partial<FormData>;
-  onSubmit: (data: FormData) => void;
+interface LoginFormProps {
   submitText?: string;
 }
 
-export default function LoginForm({ initialData, onSubmit }: ProjectFormProps) {
-  const form = useForm<FormData>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      nome: initialData?.nome || "",
-      password: initialData?.password || "",
-    },
-  });
+export default function LoginForm({ submitText = "Entrar" }: LoginFormProps) {
+  const initialState = { message: null, errors: {} };
+  const [state, formAction] = useActionState(loginAction, initialState);
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="nome"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Nome de usuário" {...field} />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[#f1f6fb] font-medium">
-                Senha
-              </FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="Senha" {...field} />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-
-        <Button
-          type="submit"
-          className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
+    <form action={formAction} className="space-y-6">
+      <div>
+        <label
+          className="text-[#f1f6fb] font-medium block mb-2"
+          htmlFor="email"
         >
-          Entrar
-        </Button>
-        <div className="mt-4 text-center text-sm">
-          Ainda não tem conta?{"  "}
-          <Link href="/sign-up" className="underline underline-offset-4">
-            Cadastrar-se
-          </Link>
-        </div>
-      </form>
-    </Form>
+          Email
+        </label>
+        <Input
+          placeholder="Email de acesso"
+          name="email"
+          type="email"
+          defaultValue=""
+        />
+        {state?.errors?.email &&
+          state.errors.email.map((error) => (
+            <div className="text-red-500" key={error}>
+              {error}
+            </div>
+          ))}
+      </div>
+
+      <div>
+        <label
+          className="text-[#f1f6fb] font-medium block mb-2"
+          htmlFor="password"
+        >
+          Senha
+        </label>
+        <Input
+          type="password"
+          placeholder="Senha"
+          name="password"
+          defaultValue=""
+        />
+        {state?.errors?.password &&
+          state.errors.password.map((error) => (
+            <div className="text-red-500" key={error}>
+              {error}
+            </div>
+          ))}
+      </div>
+
+      <Button
+        type="submit"
+        className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
+      >
+        {submitText}
+      </Button>
+      <div className="mt-4 text-center text-sm">
+        Ainda não tem conta?{"  "}
+        <Link href="/sign-up" className="underline underline-offset-4">
+          Cadastrar-se
+        </Link>
+      </div>
+      {state?.message && (
+        <div className="text-red-500 mt-2">{state.message}</div>
+      )}
+    </form>
   );
 }

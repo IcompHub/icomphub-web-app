@@ -2,8 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { atualizarProjeto, ProjetoPayload } from "@/lib/api/project";
-import { ProjectFormSchema, ProjectFormState } from "@/lib/definitions";
+import { atualizarProjeto } from "@/lib/api/project";
+import {
+  ProjectFormSchema,
+  ProjectFormState,
+  ProjetoPayload,
+} from "@/lib/definitions";
 
 // Função para gerar slug
 function generateSlug(name: string) {
