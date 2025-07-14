@@ -3,6 +3,9 @@ import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import raquel from "../../public/dev_profile/raquel.jpeg";
 import keren from "../../public/dev_profile/keren.jpeg";
+import nelson from "../../public/dev_profile/nelson.png";
+import sarah from "../../public/dev_profile/sarah.png";
+import luis from "../../public/dev_profile/luis.png";
 
 interface DevInfo {
   name: string;
@@ -18,7 +21,21 @@ const devs = [
     image: keren,
     linkedin: "https://www.linkedin.com/in/kerenguim/",
     github: "https://github.com/kerenguim",
-    cargo: "Desenvolvedora Frontend",
+    cargo: "Scrum Master & PO",
+  },
+  {
+    name: "Luis Santos",
+    image: luis,
+    linkedin: "https://www.linkedin.com/in/luis-santos-438636196/",
+    github: "https://github.com/database-luis",
+    cargo: "Testador & QA",
+  },
+  {
+    name: "Nelson Carvalho",
+    image: nelson,
+    linkedin: "https://www.linkedin.com/in/nelson-neto-181201204/",
+    github: "https://github.com/nelsul",
+    cargo: "Desenvolvedor Backend",
   },
   {
     name: "Raquel de Sá",
@@ -28,25 +45,11 @@ const devs = [
     cargo: "Desenvolvedora Frontend",
   },
   {
-    name: "Raquel de Sá",
-    image: raquel,
-    linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
-    github: "https://github.com/raqueldesa",
-    cargo: "Desenvolvedora Frontend",
-  },
-  {
-    name: "Raquel de Sá",
-    image: raquel,
-    linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
-    github: "https://github.com/raqueldesa",
-    cargo: "Desenvolvedora Frontend",
-  },
-  {
-    name: "Raquel de Sá",
-    image: raquel,
-    linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
-    github: "https://github.com/raqueldesa",
-    cargo: "Desenvolvedora Frontend",
+    name: "Sarah Júlia",
+    image: sarah,
+    linkedin: "https://www.linkedin.com/in/sarahjulia1909/",
+    github: "https://github.com/sarahjl1909",
+    cargo: "Desenvolvedora Backend",
   },
 ];
 
