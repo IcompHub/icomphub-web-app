@@ -32,7 +32,7 @@ export async function criarTechnology(data: TechnologyPayload) {
     ...data,
     slug: generateSlug(data.name),
   };
-  const res = await api.post("technologies", newData);
+  const res = await api.post("/technologies", newData);
   return res.data;
 }
 

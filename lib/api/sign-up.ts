@@ -12,7 +12,7 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
     url_github: undefined,
   };
   console.log(newData);
-    const res = await api.post("users", newData);
-    console.log("response:", res.data);
-    return res.data;
+  const res = await api.post("/users", newData);
+  console.log("response:", res.data);
+  return res.data;
 }
