@@ -1,10 +1,12 @@
-import { Logo } from "@/components/general/logo";
 import { GithubIcon, Linkedin } from "lucide-react";
 import Link from "next/link";
+import Image, { StaticImageData } from "next/image";
+import raquel from "../../public/dev_profile/raquel.jpeg";
+import keren from "../../public/dev_profile/keren.jpeg";
 
 interface DevInfo {
   name: string;
-  image: string;
+  image: StaticImageData;
   linkedin: string;
   github: string;
   cargo: string;
@@ -12,29 +14,36 @@ interface DevInfo {
 
 const devs = [
   {
+    name: "Keren Guimarães",
+    image: keren,
+    linkedin: "https://www.linkedin.com/in/kerenguim/",
+    github: "https://github.com/kerenguim",
+    cargo: "Desenvolvedora Frontend",
+  },
+  {
     name: "Raquel de Sá",
-    image: "",
+    image: raquel,
     linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
     github: "https://github.com/raqueldesa",
     cargo: "Desenvolvedora Frontend",
   },
   {
     name: "Raquel de Sá",
-    image: "",
+    image: raquel,
     linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
     github: "https://github.com/raqueldesa",
     cargo: "Desenvolvedora Frontend",
   },
   {
     name: "Raquel de Sá",
-    image: "",
+    image: raquel,
     linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
     github: "https://github.com/raqueldesa",
     cargo: "Desenvolvedora Frontend",
   },
   {
     name: "Raquel de Sá",
-    image: "",
+    image: raquel,
     linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
     github: "https://github.com/raqueldesa",
     cargo: "Desenvolvedora Frontend",
@@ -44,18 +53,18 @@ const devs = [
 export default function AboutUs() {
   return (
     <main className="p-6">
-      <div className=" max-w-6xl mx-auto ">
+      <div className=" max-w-5xl mx-auto ">
         <h1 className="text-3xl font-bold mb-2">Quem somos?</h1>
-        <p className="text-[#94a3b8] mb-8">
-          Somos alunos finalistas do curo de{" "}
+        <p className="text-[#94a3b8] mb-8 text-xl">
+          Somos alunos finalistas do curso de{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400">
             {" "}
             Engenharia de Software
           </span>
-          . Fizemos esse sistema para compor nossa disciplica de estágio
+          . Fizemos esse sistema para compor nossa disciplina de estágio
           obrigatório.
         </p>
-        <div className="lg:gap-8 md:gap-6 lg:grid md:grid lg:grid-cols-3 md:grid-cols-2">
+        <div className="lg:gap-8 md:gap-6 lg:flex md:grid lg:flex-wrap lg:justify-center md:grid-cols-2">
           {devs.map((dev, i) => (
             <DevCard
               key={i}
@@ -73,11 +82,15 @@ export default function AboutUs() {
 }
 function DevCard({ cargo, image, github, linkedin, name }: DevInfo) {
   return (
-    <div className="max-w-md flex flex-col items-center justify-center bg-[#204586] rounded-lg p-8">
-      <Logo w={120} h={100} />
-      <p className="w-fit">{name}</p>
-      <p className="w-fit">{cargo}</p>
-      <p>{image}</p>
+    <div className="gap-1 max-w-md flex flex-col items-center justify-center rounded-lg p-8 mb-4 lg:w-2xs bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01] gap">
+      <Image
+        src={image}
+        width={150}
+        alt="Picture of the author"
+        className="rounded-full"
+      />
+      <p className="w-fit text-lg font-semibold">{name}</p>
+      <p className="w-fit text-sm">{cargo}</p>
       <div className="flex w-fit">
         <Link href={github} target="_blank">
           <GithubIcon className="transition-colors cursor-pointer rounded border border-transparent hover:bg-white hover:border-[#1a222f] hover:text-[#1a222f] m-1" />
