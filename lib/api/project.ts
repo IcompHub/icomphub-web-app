@@ -271,7 +271,7 @@ export async function listarProjetoPorID(id: number) {
   const projects: ProjectDetailsDTO = res.data.data;
 
   // return projectData.find((p) => p.id === id);
-  //console.log(res.data.data);
+  // console.log(res.data.data);
   return projects;
 }
 

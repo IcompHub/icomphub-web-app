@@ -16,3 +16,9 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
   console.log("response:", res.data);
   return res.data;
 }
+
+export async function listarUsuarios() {
+  const res = await api.get("/users?pageNumber=1&pageSize=100");
+  // console.log("response:", res.data.data.items);
+  return res.data.data.items;
+}
