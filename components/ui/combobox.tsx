@@ -19,19 +19,28 @@ import {
   CommandList,
 } from "./command";
 
-type Option = {
-  name: string;
+// Tipos genéricos
+type Technology = {
+  id: number;
   slug: string;
+  name: string;
+  has_image?: boolean;
 };
 
-// 1. As props foram atualizadas:
-// - `value` e `onChange` foram removidos.
-// - `name` foi adicionado e é obrigatório.
-// - `defaultValue` foi adicionado para popular o estado inicial (útil em formulários de edição).
+type User = {
+  id: number;
+  nickname: string;
+  status?: string;
+  roles?: any[];
+};
+
+type OptionType = "user" | "technology";
+
 interface MultiComboboxProps {
-  options: Option[];
-  name: string; // Essencial para o FormData
-  defaultValue?: string[];
+  options: (User | Technology)[];
+  name: string;
+  type: OptionType;
+  defaultValue?: (User | Technology)[];
   placeholder?: string;
   className?: string;
 }
@@ -39,27 +48,47 @@ interface MultiComboboxProps {
 export default function MultiCombobox({
   options,
   name,
+  type,
   defaultValue = [],
   placeholder = "Selecione opções...",
   className,
 }: MultiComboboxProps) {
   const [open, setOpen] = React.useState(false);
-
-  // 2. O componente agora gerencia seu próprio estado para os valores selecionados.
   const [selectedValues, setSelectedValues] =
-    React.useState<string[]>(defaultValue);
+    React.useState<(User | Technology)[]>(defaultValue);
 
-  const handleSelect = (currentValue: string) => {
-    // A lógica agora atualiza o estado interno, em vez de chamar um `onChange` externo.
-    if (selectedValues.includes(currentValue)) {
-      setSelectedValues(selectedValues.filter((v) => v !== currentValue));
+  const getIdentifier = (item: User | Technology) =>
+    type === "technology"
+      ? (item as Technology).slug
+      : String((item as User).id);
+
+  const getLabel = (item: User | Technology) => {
+    console.log(`type: ${type} item: ${item}`);
+    return type === "technology"
+      ? (item as Technology).name
+      : (item as User).nickname;
+  };
+
+  const isSelected = (item: User | Technology) =>
+    selectedValues.some((v) => getIdentifier(v) === getIdentifier(item));
+
+  const handleSelect = (identifier: string) => {
+    const found = options.find((opt) => getIdentifier(opt) === identifier);
+    if (!found) return;
+
+    if (isSelected(found)) {
+      setSelectedValues((prev) =>
+        prev.filter((v) => getIdentifier(v) !== identifier)
+      );
     } else {
-      setSelectedValues([...selectedValues, currentValue]);
+      setSelectedValues((prev) => [...prev, found]);
     }
   };
 
-  const handleRemove = (val: string) => {
-    setSelectedValues(selectedValues.filter((v) => v !== val));
+  const handleRemove = (identifier: string) => {
+    setSelectedValues((prev) =>
+      prev.filter((v) => getIdentifier(v) !== identifier)
+    );
   };
 
   return (
@@ -85,20 +114,17 @@ export default function MultiCombobox({
             <CommandList>
               <CommandEmpty>Nenhuma opção encontrada.</CommandEmpty>
               <CommandGroup>
-                {options.map((option) => (
+                {options.map((option, i) => (
                   <CommandItem
-                    key={option.slug}
-                    onSelect={() => handleSelect(option.slug)}
-                    className="cursor-pointer text-[#f1f6fb] "
+                    key={i}
+                    onSelect={() => handleSelect(getIdentifier(option))}
+                    className="cursor-pointer text-[#f1f6fb]"
                   >
-                    {option.name}
+                    {getLabel(option)}
                     <Check
                       className={cn(
                         "ml-auto h-4 w-4",
-                        // Usa o estado interno `selectedValues` para verificar a seleção.
-                        selectedValues.includes(option.slug)
-                          ? "opacity-100"
-                          : "opacity-0"
+                        isSelected(option) ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>
@@ -109,37 +135,29 @@ export default function MultiCombobox({
         </PopoverContent>
       </Popover>
 
-      {/* Exibição das badges, usando o estado interno `selectedValues` */}
       {selectedValues.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2 p-2 bg-[#0f172a] border border-[#1a222f] rounded-md">
-          {selectedValues.map((val) => {
-            const label = options.find((opt) => opt.slug === val)?.name;
-            return (
-              <Badge
-                key={val}
-                className="flex items-center gap-1 bg-[#1e293b] text-[#f1f6fb] border "
+          {selectedValues.map((val, i) => (
+            <Badge
+              key={i}
+              className="flex items-center gap-1 bg-[#1e293b] text-[#f1f6fb] border"
+            >
+              {getLabel(val)}
+              <button
+                type="button"
+                onClick={() => handleRemove(getIdentifier(val))}
+                className="text-[#94a3b8] hover:text-white"
               >
-                {label}
-                <button
-                  type="button"
-                  onClick={() => handleRemove(val)}
-                  className="text-[#94a3b8] hover:text-white"
-                >
-                  <X size={12} />
-                </button>
-              </Badge>
-            );
-          })}
+                <X size={12} />
+              </button>
+            </Badge>
+          ))}
         </div>
       )}
 
-      {/* 3. A MÁGICA ACONTECE AQUI:
-          Renderizamos inputs escondidos para cada valor selecionado.
-          O `FormData` do formulário pai irá coletar os dados desses inputs.
-      */}
       <div className="hidden">
-        {selectedValues.map((val) => (
-          <input key={val} type="hidden" name={name} value={val} />
+        {selectedValues.map((val, i) => (
+          <input key={i} type="hidden" name={name} value={getIdentifier(val)} />
         ))}
       </div>
     </div>

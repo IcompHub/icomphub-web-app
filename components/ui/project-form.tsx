@@ -16,6 +16,7 @@ interface ProjectFormProps {
   initialData?: any;
   submitText?: string;
   technologies: any;
+  users: any;
 }
 
 // 1. Defina o schema de validação aqui. É o mesmo que você já tinha.
@@ -59,6 +60,7 @@ export default function ProjectForm({
   initialData,
   submitText = "Cadastrar",
   technologies,
+  users,
 }: ProjectFormProps) {
   const initialState: ProjectFormState = { message: null, errors: {} };
   const [state, formActionCreate] = useActionState(
@@ -75,8 +77,8 @@ export default function ProjectForm({
         id: initialData.id?.toString() ?? "",
         name: initialData.name ?? "",
         descricao: initialData.data?.description ?? "",
-        participantes: initialData.data?.participants ?? [],
-        tecnologias: initialData.data?.technologies ?? [],
+        participantes: initialData.members ?? [],
+        tecnologias: initialData.technologies ?? [],
         url: initialData.data?.url ?? "",
       }
     : {
@@ -87,7 +89,7 @@ export default function ProjectForm({
         tecnologias: [],
         url: "",
       };
-
+  console.log(`initial data`, mappedInitialData);
   return (
     <form
       action={submitText === "Cadastrar" ? formActionCreate : formActionUpdate}
@@ -137,9 +139,10 @@ export default function ProjectForm({
           Participantes
         </label>
         <MultiCombobox
+          type="user"
           name="participantes"
           placeholder="Digite o nome dos integrantes"
-          options={participantesOptions}
+          options={users}
           defaultValue={mappedInitialData.participantes}
           // value={formData.participantes}
           // onChange={(value) => handleArrayChange("participantes", value)}
@@ -158,6 +161,7 @@ export default function ProjectForm({
           Tecnologias
         </label>
         <MultiCombobox
+          type="technology"
           name="tecnologias"
           placeholder="Digite as tecnologias utilizadas"
           options={technologies}

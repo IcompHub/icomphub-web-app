@@ -1,9 +1,11 @@
 import ProjectForm from "@/components/ui/project-form";
+import { listarUsuarios } from "@/lib/api/sign-up";
 
 import { listarTechnologies } from "@/lib/api/technologies";
 
 export default async function Home() {
   const technologies = await listarTechnologies();
+  const users = await listarUsuarios();
 
   return (
     <main className="p-6">
@@ -13,7 +15,11 @@ export default async function Home() {
           Queremos saber um pouco do seu projeto :)
         </p>
 
-        <ProjectForm submitText="Cadastrar" technologies={technologies} />
+        <ProjectForm
+          submitText="Cadastrar"
+          technologies={technologies}
+          users={users}
+        />
       </div>
     </main>
   );

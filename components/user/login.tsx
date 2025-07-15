@@ -70,13 +70,16 @@ export default function LoginForm({ submitText = "Entrar" }: LoginFormProps) {
 
       <Button
         type="submit"
-        className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#e3e7eb] transition-colors cursor-pointer"
+        className="w-full py-6 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#cdd3d9] transition-colors cursor-pointer"
       >
         {submitText}
       </Button>
       <div className="mt-4 text-center text-sm">
         Ainda não tem conta?{"  "}
-        <Link href="/sign-up" className="underline underline-offset-4">
+        <Link
+          href="/sign-up"
+          className="underline underline-offset-4 hover:text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400"
+        >
           Cadastrar-se
         </Link>
       </div>

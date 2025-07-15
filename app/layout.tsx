@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/general/navbar";
+import { getProfile, listarUsuarios } from "@/lib/api/sign-up";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,16 +22,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const profile = await getProfile();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Navbar profile={profile}></Navbar>
         {children}
       </body>
     </html>
