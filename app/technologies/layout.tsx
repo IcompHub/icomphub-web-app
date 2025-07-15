@@ -7,7 +7,6 @@ export default function LayoutTech({
 }>) {
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f6fb] pt-20">
-      <Navbar />
       {children}
     </div>
   );
