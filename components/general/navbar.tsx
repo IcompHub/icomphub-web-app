@@ -10,12 +10,12 @@ import { Logo } from "./logo";
 import AvatarUser from "../user/avatar";
 
 interface NavProp {
-  profile: string | undefined;
+  profile: string | null;
 }
 
 export default function Navbar({ profile }: NavProp) {
   const [open, setOpen] = useState(false);
-  console.log(typeof profile);
+
   return (
     <motion.nav
       initial={{ y: -100 }}
