@@ -36,14 +36,14 @@ const gradients = [
 ];
 
 interface ListProjectsProps {
-  projetos: Project[]; 
+  projetos: Project[];
 }
 
 export default function ListProjects({ projetos }: ListProjectsProps) {
   return (
     <>
       {projetos && projetos.length > 0 ? (
-        <div className="lg:gap-8 md:gap-6 lg:grid md:grid lg:grid-cols-3 md:grid-cols-2">
+        <div className="lg:gap-8 md:gap-6 lg:grid md:grid lg:grid-cols-3 md:grid-cols-2 ">
           {projetos.map((project, i) => (
             <motion.div
               key={project.id}
@@ -60,7 +60,7 @@ export default function ListProjects({ projetos }: ListProjectsProps) {
           ))}
         </div>
       ) : (
-        <div className="h-150 flex flex-col items-center justify-center w-full text-center">
+        <div className="h-150 flex flex-col items-center justify-center w-full text-center ">
           <Logo w={80} h={80} />
           <p className="mt-4 text-slate-400">Nenhum projeto encontrado.</p>
         </div>
@@ -73,11 +73,17 @@ type ProjectCardProps = Project & {
   gradient: string;
 };
 
-function ProjectCard({ id, slug, name, data, technologies, gradient }: ProjectCardProps) {
+function ProjectCard({
+  id,
+  slug,
+  name,
+  data,
+  technologies,
+  gradient,
+}: ProjectCardProps) {
   return (
     <Link href={`/project/${slug}-${id}`} className="block h-full">
-      <div className="flex flex-col h-full rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
-
+      <div className="flex flex-col h-full rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]  mb-6">
         <div className={`h-28 bg-gradient-to-r ${gradient}`} />
         <div className="p-6 flex flex-col flex-grow">
           <h2 className="text-xl font-bold mb-2">{name}</h2>
@@ -85,7 +91,7 @@ function ProjectCard({ id, slug, name, data, technologies, gradient }: ProjectCa
           <p className="text-[#a1a1aa] mb-4 text-sm flex-grow">
             {data.description}
           </p>
-          
+
           <div className="flex flex-wrap gap-2 mt-auto">
             {technologies?.map((tech) => (
               <TechTag key={tech.id} tech={tech} />

@@ -7,8 +7,6 @@ export default function LayoutProject({
 }>) {
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f6fb] pt-20">
-      <Navbar />
-
       {children}
     </div>
   );

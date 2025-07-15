@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, UserRound, X } from "lucide-react";
+import { LogOut, Menu, UserRound, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type React from "react";
 import { Logo } from "./logo";
+import AvatarUser from "../user/avatar";
 
-export default function Navbar() {
+interface NavProp {
+  profile: string | undefined;
+}
+
+export default function Navbar({ profile }: NavProp) {
   const [open, setOpen] = useState(false);
-
+  console.log(typeof profile);
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -31,15 +36,27 @@ export default function Navbar() {
       </div>
 
       <div className="hidden md:flex items-center space-x-4">
-        <Link href={`/login-user`} className="h-fit">
+        <Link href={profile ? `/logout` : `/login-user`} className="h-fit">
           <Button
             variant="ghost"
             className="bg-[#080D17] hover:[#1A222F] text-white px-8 cursor-pointer border border-[#1A222F]"
           >
-            <UserRound className="mr-2 h-5 w-5" />
-            Entrar
+            {" "}
+            {profile ? (
+              <LogOut className="mr-2 h-5 w-5" />
+            ) : (
+              <UserRound className="mr-2 h-5 w-5" />
+            )}
+            {profile ? `Sair` : `Entrar`}
           </Button>
         </Link>
+        {profile && (
+          <img
+            src={profile}
+            alt="Foto de perfil"
+            className="rounded-full w-10  border border-[#1A222F]"
+          />
+        )}
       </div>
 
       <Button
@@ -49,7 +66,14 @@ export default function Navbar() {
         onClick={() => setOpen(true)}
         aria-label="Abrir menu"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-6 h-6 mr-1" />
+        {profile && (
+          <img
+            src={profile}
+            alt="Foto de perfil"
+            className="rounded-full w-10  border border-[#1A222F]"
+          />
+        )}
       </Button>
 
       {/* Menu mobile */}
@@ -94,7 +118,7 @@ export default function Navbar() {
                   className="bg-[#080D17] w-full hover:[#1A222F] text-white cursor-pointer border border-[#1A222F] mt-4"
                 >
                   <UserRound className="mr-2 h-5 w-5" />
-                  Entrar
+                  {profile ? `Sair` : `Entrar`}
                 </Button>
               </Link>
             </nav>
