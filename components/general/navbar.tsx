@@ -8,6 +8,7 @@ import Link from "next/link";
 import type React from "react";
 import { Logo } from "./logo";
 import AvatarUser from "../user/avatar";
+import { redirect } from "next/navigation";
 
 interface NavProp {
   profile: string | null;
@@ -54,7 +55,8 @@ export default function Navbar({ profile }: NavProp) {
           <img
             src={profile}
             alt="Foto de perfil"
-            className="rounded-full w-10  border border-[#1A222F]"
+            className="rounded-full w-10  border border-[#1A222F] cursor-pointer"
+            onClick={() => redirect("/profile")}
           />
         )}
       </div>
@@ -71,7 +73,8 @@ export default function Navbar({ profile }: NavProp) {
           <img
             src={profile}
             alt="Foto de perfil"
-            className="rounded-full w-10  border border-[#1A222F]"
+            className="rounded-full w-10  border border-[#1A222F] cursor-pointer"
+            onClick={() => redirect("/profile")}
           />
         )}
       </Button>

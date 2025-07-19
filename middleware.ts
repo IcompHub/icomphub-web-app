@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
     redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE;
     return NextResponse.redirect(redirectUrl);
   }
-  console.log(authToken);
+
   return NextResponse.next();
 }
 

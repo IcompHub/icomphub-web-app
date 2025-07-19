@@ -1,7 +1,9 @@
+"use server";
+
 import { signUpSchema } from "@/components/user/sign-up";
 import api from "./axios";
 import { z } from "zod";
-import { defaultAvatar, generateSlug } from "../utils";
+import { decodeJwt, defaultAvatar, generateSlug } from "../utils";
 import { cookies } from "next/headers";
 
 export async function signUp(data: z.infer<typeof signUpSchema>) {
@@ -23,22 +25,35 @@ export async function listarUsuarios() {
   // console.log("response:", res.data.data.items);
   return res.data.data.items;
 }
+export async function listarUsuario() {
+  const token = await getToken();
+
+  const payload = decodeJwt(token ?? "");
+
+  const res = await api.get(`/users/${payload.user_id}`);
+
+  return res.data.data;
+}
 
 // Utility to validate image MIME types
 const isImageMimeType = (mimeType: string | undefined): boolean => {
   return !!mimeType && /^image\/(png|jpeg|gif|webp)$/.test(mimeType);
 };
 
+export async function getToken() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    // console.warn("No token found in cookies");
+    return null; // Or return a default placeholder: "data:image/png;base64,..."
+  }
+  return token;
+}
+
 export async function getProfile(): Promise<string | null> {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-
-    if (!token) {
-      // console.warn("No token found in cookies");
-      return null; // Or return a default placeholder: "data:image/png;base64,..."
-    }
-
+    const token = await getToken();
     // Make the API request without assuming responseType initially
     const res = await api.get("/users/profile-picture", {
       headers: {
@@ -78,5 +93,54 @@ export async function getProfile(): Promise<string | null> {
     // Handle network errors, parsing errors, or API client errors
     // console.error("Failed to fetch profile picture:", error.message);
     return defaultAvatar; // Or throw new Error("Failed to fetch profile picture") if preferred
+  }
+}
+
+export async function uploadProfilePictureAction(
+  formData: FormData
+): Promise<void> {
+  try {
+    const token = await getToken();
+    console.log(token);
+    const response = await api.post("/users/profile-picture", {
+      headers: {
+        ContentType: "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response) {
+      throw new Error(`API error: ${response}`);
+    }
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    throw error;
+  }
+}
+
+export async function deleteProfilePictureAction(
+  formData: FormData
+): Promise<void> {
+  try {
+    const token = await getToken();
+    const response = await fetch(
+      "http://your-api-base-url/users/profile-picture",
+      {
+        method: "DELETE",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error("Error deleting profile picture:", error);
+    throw error;
   }
 }
