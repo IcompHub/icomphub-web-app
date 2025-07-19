@@ -4,6 +4,7 @@ const privateRoutes = [
   "/project/create",
   // Expressão regular para /project/[id]/edit
   /^\/project\/[^\/]+\/edit$/,
+  "/profile",
 ];
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/login-user";

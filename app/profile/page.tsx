@@ -1,16 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { GithubIcon, Linkedin, Upload, Trash2 } from "lucide-react";
-import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
-import raquel from "../../public/dev_profile/raquel.jpeg";
-import {
-  deleteProfilePictureAction,
-  getToken,
-  uploadProfilePictureAction,
-} from "@/lib/api/sign-up";
-import api from "@/lib/api/axios";
+import { Upload } from "lucide-react";
+
+import { uploadPhoto } from "@/lib/api/actions/upload-files";
 
 interface UserInfo {
   id?: number;
@@ -26,16 +19,6 @@ interface ProfileProps {
   profile_picture: string | null;
   token: string; // Added token prop
 }
-
-const devs = [
-  {
-    name: "Raquel de Sá",
-    image: raquel,
-    linkedin: "https://www.linkedin.com/in/raquel-de-sa-silva/",
-    github: "https://github.com/raqueldesa",
-    cargo: "Desenvolvedora Frontend",
-  },
-];
 
 export default function UserProfile({
   profile,
@@ -72,50 +55,35 @@ function UserCard({
 }: UserInfo) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleUpload = async (event) => {
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    console.log(file);
 
     const formData = new FormData();
     formData.append("image", file);
 
-    const token = await getToken(); // Substitua pelo seu token real
-
     try {
-      const response = await api.post("/users/profile-picture", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response) {
-        throw new Error("Falha no upload da imagem.");
-      }
-
-      console.log("Upload bem-sucedido!");
+      const res = await uploadPhoto(formData);
     } catch (error) {
-      console.error("Erro no upload:", error);
-      alert(error);
+      console.log(error);
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm("Tem certeza que deseja excluir a foto de perfil?")) return;
+  // const handleDelete = async () => {
+  //   if (!confirm("Tem certeza que deseja excluir a foto de perfil?")) return;
 
-    const formData = new FormData();
-    if (id) formData.append("user_id", id.toString());
-    formData.append("profile_picture_id", profile_picture_id);
+  //   const formData = new FormData();
+  //   if (id) formData.append("user_id", id.toString());
+  //   formData.append("profile_picture_id", profile_picture_id);
 
-    try {
-      await deleteProfilePictureAction(formData);
-      alert("Foto de perfil excluída com sucesso!");
-    } catch (error) {
-      console.error("Failed to delete profile picture:", error);
-      alert("Erro ao excluir a foto de perfil.");
-    }
-  };
+  //   try {
+  //     await deleteProfilePictureAction(formData);
+  //     alert("Foto de perfil excluída com sucesso!");
+  //   } catch (error) {
+  //     console.error("Failed to delete profile picture:", error);
+  //     alert("Erro ao excluir a foto de perfil.");
+  //   }
+  // };
 
   return (
     <div className="gap-4 mt-10 max-w-md flex items-center justify-center rounded-lg p-8 mb-4 bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
@@ -142,7 +110,7 @@ function UserCard({
               onChange={handleUpload}
             />
           </label>
-          {profile_picture && (
+          {/* {profile_picture && (
             <button
               type="button"
               onClick={handleDelete}
@@ -152,7 +120,7 @@ function UserCard({
               <Trash2 size={16} />
               <span>Excluir</span>
             </button>
-          )}
+          )} */}
         </div>
         {/* <input
           type="file"

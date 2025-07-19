@@ -54,6 +54,7 @@ export async function getToken() {
 export async function getProfile(): Promise<string | null> {
   try {
     const token = await getToken();
+    if (!token) return null;
     // Make the API request without assuming responseType initially
     const res = await api.get("/users/profile-picture", {
       headers: {
