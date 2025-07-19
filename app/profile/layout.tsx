@@ -6,12 +6,9 @@ export default async function LayoutProject({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const profile = await listarUsuario();
-  const profile_picture = await getProfile();
-
   return (
     <div className="min-h-screen bg-[#010103] text-[#f1f6fb] pt-20">
-      <UserProfile profile={profile} profile_picture={profile_picture} />
+      {children}
     </div>
   );
 }

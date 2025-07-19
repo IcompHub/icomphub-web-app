@@ -46,15 +46,19 @@ export async function editProjectAction(
     validatedFields.data;
 
   const payload: ProjetoPayload = {
-    class_group_id: 1, // ajuste conforme necessário
+    class_group_id: 1,
     data: {
       description: descricao,
-      participants: participantes,
-      technologies: tecnologias,
       url: url,
     },
     name: name,
     slug: generateSlug(name),
+    members: participantes.map((p) => ({
+      nickname: p.nickname,
+      role: p.role,
+      user_id: p.user_id,
+    })),
+    technologies: tecnologias,
   };
 
   try {
