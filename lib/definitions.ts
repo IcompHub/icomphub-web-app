@@ -10,10 +10,16 @@ export const ProjectFormSchema = z.object({
     .string()
     .min(10, { message: "Descrição deve ter pelo menos 10 caracteres." }),
   participantes: z
-    .array(z.string())
+    .array(
+      z.object({
+        user_id: z.number(),
+        nickname: z.string(),
+        role: z.string(),
+      })
+    )
     .min(1, { message: "Selecione pelo menos um participante." }),
   tecnologias: z
-    .array(z.string())
+    .array(z.object({ name: z.string(), slug: z.string() }))
     .min(1, { message: "Selecione pelo menos uma tecnologia." }),
   url: z.string().url({ message: "URL inválida. Insira uma URL completa." }),
 });
@@ -32,13 +38,25 @@ export type ProjectFormState = {
 
 // Se o tipo ProjetoPayload também for usado em outros lugares, pode ficar aqui.
 export interface ProjetoPayload {
+  id?: number;
   class_group_id: number;
   data: {
     description: string;
-    participants: string[];
-    technologies: string[];
     url: string;
   };
+  name: string;
+  slug: string;
+  members: MemberPayload[];
+  technologies: DefaultPayload[];
+}
+
+export interface MemberPayload {
+  nickname: string;
+  role: string;
+  user_id: number;
+}
+
+export interface DefaultPayload {
   name: string;
   slug: string;
 }

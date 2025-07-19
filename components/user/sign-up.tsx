@@ -98,9 +98,7 @@ export default function SignUpForm({ initialData }: ProjectFormProps) {
     });
 
     const result = await signUpAction({}, formData);
-    if (result.errors) {
-      console.log(result.errors);
-    }
+
     // });
   }
 

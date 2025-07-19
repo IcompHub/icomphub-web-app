@@ -21,17 +21,17 @@ import {
 
 // Tipos genéricos
 type Technology = {
-  id: number;
+  id?: number;
   slug: string;
   name: string;
   has_image?: boolean;
 };
 
 type User = {
-  id: number;
+  user_id: number;
   nickname: string;
   status?: string;
-  roles?: any[];
+  role?: string;
 };
 
 type OptionType = "user" | "technology";
@@ -60,14 +60,10 @@ export default function MultiCombobox({
   const getIdentifier = (item: User | Technology) =>
     type === "technology"
       ? (item as Technology).slug
-      : String((item as User).id);
+      : String((item as User).user_id);
 
-  const getLabel = (item: User | Technology) => {
-    console.log(`type: ${type} item: ${item}`);
-    return type === "technology"
-      ? (item as Technology).name
-      : (item as User).nickname;
-  };
+  const getLabel = (item: User | Technology) =>
+    type === "technology" ? (item as Technology).name : (item as User).nickname;
 
   const isSelected = (item: User | Technology) =>
     selectedValues.some((v) => getIdentifier(v) === getIdentifier(item));
@@ -91,6 +87,19 @@ export default function MultiCombobox({
     );
   };
 
+  // Serialize selected values to JSON
+  const serializedValue = JSON.stringify(
+    selectedValues.map((val) => ({
+      ...(type === "user"
+        ? {
+            user_id: (val as User).user_id,
+            nickname: (val as User).nickname,
+            role: (val as User).role || "",
+          }
+        : { name: (val as Technology).name, slug: (val as Technology).slug }),
+    }))
+  );
+
   return (
     <div className={cn("w-full", className)}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -99,7 +108,7 @@ export default function MultiCombobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between px-4 py-3 bg-[#0f172a] border border-[#1a222f] text-[#64748b] placeholder:text-[#64748b] hover:bg-[#1a2538]  hover:text-[#f1f6fb]"
+            className="w-full justify-between px-4 py-3 bg-[#0f172a] border border-[#1a222f] text-[#64748b] placeholder:text-[#64748b] hover:bg-[#1a2538] hover:text-[#f1f6fb]"
           >
             {placeholder}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#64748b]" />
@@ -109,7 +118,7 @@ export default function MultiCombobox({
           <Command>
             <CommandInput
               placeholder="Buscar..."
-              className=" placeholder:text-[#64748b]"
+              className="placeholder:text-[#64748b]"
             />
             <CommandList>
               <CommandEmpty>Nenhuma opção encontrada.</CommandEmpty>
@@ -155,11 +164,7 @@ export default function MultiCombobox({
         </div>
       )}
 
-      <div className="hidden">
-        {selectedValues.map((val, i) => (
-          <input key={i} type="hidden" name={name} value={getIdentifier(val)} />
-        ))}
-      </div>
+      <input type="hidden" name={name} value={serializedValue} />
     </div>
   );
 }

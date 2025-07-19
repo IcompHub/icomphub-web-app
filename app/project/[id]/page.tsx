@@ -8,7 +8,6 @@ import { listarProjetoPorID } from "@/lib/api/project";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-
 export default async function ProjectPage(props: {
   params: Promise<{ id: string }>;
 }) {
@@ -16,9 +15,9 @@ export default async function ProjectPage(props: {
   // Extrai apenas o id numérico do formato "${slug}-${id}"
   const idString = params.id.split("-").pop();
   const id = Number(idString);
-  console.log("teste: ", idString)
+
   const project = await listarProjetoPorID(id);
-  console.log("teste1: ", project)
+
   if (!project) {
     notFound();
   }

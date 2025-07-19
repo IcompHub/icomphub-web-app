@@ -4,36 +4,46 @@ import { useActionState } from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import MultiCombobox from "./combobox";
 import { createProjectAction } from "@/lib/api/actions/create-project";
-import { ProjectFormState } from "@/lib/definitions";
 import { editProjectAction } from "@/lib/api/actions/edit-project";
-
-type FormData = z.infer<typeof formSchema>;
+import {
+  ProjectFormState,
+  ProjetoPayload,
+  MemberPayload,
+  DefaultPayload,
+} from "@/lib/definitions";
 
 interface ProjectFormProps {
-  initialData?: any;
+  initialData?: ProjetoPayload;
   submitText?: string;
-  technologies: any;
-  users: any;
+  technologies: { name: string; slug: string }[];
+  users: {
+    id: number;
+    nickname: string;
+    role: string;
+  }[];
 }
 
-// 1. Defina o schema de validação aqui. É o mesmo que você já tinha.
 export const formSchema = z.object({
-  id: z.string().optional(), // FormData envia tudo como string
+  id: z.string().optional(),
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres."),
   descricao: z.string().min(10, "Descrição deve ter pelo menos 10 caracteres."),
   participantes: z
-    .array(z.string())
+    .array(
+      z.object({
+        user_id: z.number(),
+        nickname: z.string(),
+        role: z.array(z.object({ name: z.string(), slug: z.string() })),
+      })
+    )
     .min(1, "Selecione pelo menos um participante."),
   tecnologias: z
-    .array(z.string())
+    .array(z.object({ name: z.string(), slug: z.string() }))
     .min(1, "Selecione pelo menos uma tecnologia."),
   url: z.string().url("URL inválida. Insira uma URL completa."),
 });
 
-// 2. Defina a interface para o estado do formulário
 export type State = {
   errors?: {
     name?: string[];
@@ -44,17 +54,6 @@ export type State = {
   };
   message?: string | null;
 };
-
-const participantesOptions = [
-  { slug: "raquel", name: "Raquel de Sá" },
-  { slug: "keren", name: "Keren Guimarães" },
-  { slug: "luis", name: "Luis Santos" },
-  { slug: "carlos", name: "Carlos Oliveira" },
-  { slug: "ana", name: "Ana Pereira" },
-  { slug: "bruno", name: "Bruno Costa" },
-  { slug: "julia", name: "Julia Ferreira" },
-  { slug: "ismael", name: "Ismael Ferreira" },
-];
 
 export default function ProjectForm({
   initialData,
@@ -77,7 +76,12 @@ export default function ProjectForm({
         id: initialData.id?.toString() ?? "",
         name: initialData.name ?? "",
         descricao: initialData.data?.description ?? "",
-        participantes: initialData.members ?? [],
+        participantes:
+          initialData.members?.map((m: MemberPayload) => ({
+            user_id: m.user_id,
+            nickname: m.nickname,
+            role: m.role,
+          })) ?? [],
         tecnologias: initialData.technologies ?? [],
         url: initialData.data?.url ?? "",
       }
@@ -89,7 +93,7 @@ export default function ProjectForm({
         tecnologias: [],
         url: "",
       };
-  console.log(`initial data`, mappedInitialData);
+
   return (
     <form
       action={submitText === "Cadastrar" ? formActionCreate : formActionUpdate}
@@ -102,8 +106,6 @@ export default function ProjectForm({
           name="name"
           placeholder="Digite o nome do projeto"
           defaultValue={mappedInitialData.name}
-          // value={formData.name}
-          // onChange={handleChange}
         />
         {state.errors?.name && (
           <div className="text-red-500 mt-1">
@@ -122,8 +124,6 @@ export default function ProjectForm({
           name="descricao"
           placeholder="Explique sobre o que é o projeto"
           defaultValue={mappedInitialData.descricao}
-          // value={formData.descricao}
-          // onChange={handleChange}
         />
         {state.errors?.descricao && (
           <div className="text-red-500 mt-1">
@@ -142,10 +142,12 @@ export default function ProjectForm({
           type="user"
           name="participantes"
           placeholder="Digite o nome dos integrantes"
-          options={users}
+          options={users.map((user) => ({
+            user_id: user.id,
+            nickname: user.nickname,
+            role: user.role,
+          }))}
           defaultValue={mappedInitialData.participantes}
-          // value={formData.participantes}
-          // onChange={(value) => handleArrayChange("participantes", value)}
         />
         {state.errors?.participantes && (
           <div className="text-red-500 mt-1">
@@ -184,8 +186,6 @@ export default function ProjectForm({
           name="url"
           placeholder="Digite onde o site está hospedado"
           defaultValue={mappedInitialData.url}
-          // value={formData.url}
-          // onChange={handleChange}
         />
         {state.errors?.url && (
           <div className="text-red-500 mt-1">

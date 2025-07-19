@@ -212,17 +212,14 @@ export interface PaginatedProjectsResponse {
 }
 
 export async function criarProjeto(data: ProjetoPayload) {
-  console.log(data);
-
   const res = await api.post("/projects", data);
 
   return res.data;
 }
 
 export async function atualizarProjeto(id: number, data: any) {
-  console.log(id);
   const res = await api.put(`/projects/${id}`, data);
-  console.log(res);
+
   return res.data;
 }
 
@@ -270,8 +267,6 @@ export async function listarProjetoPorID(id: number) {
   const res = await api.get(`/projects/${id}`);
   const projects: ProjectDetailsDTO = res.data.data;
 
-  // return projectData.find((p) => p.id === id);
-  // console.log(res.data.data);
   return projects;
 }
 
