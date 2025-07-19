@@ -16,7 +16,7 @@ interface NavProp {
 
 export default function Navbar({ profile }: NavProp) {
   const [open, setOpen] = useState(false);
-  console.log(profile);
+
   return (
     <motion.nav
       initial={{ y: -100 }}

@@ -34,7 +34,7 @@ export async function editProjectAction(
 
   // Valida os dados usando Zod
   const validatedFields = ProjectFormSchema.safeParse(rawData);
-  console.log(validatedFields.error);
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,

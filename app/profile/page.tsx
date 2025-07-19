@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Upload } from "lucide-react";
+import { Trash, Upload } from "lucide-react";
 
-import { uploadPhoto } from "@/lib/api/actions/upload-files";
+import { deletePhoto, uploadPhoto } from "@/lib/api/actions/upload-files";
+import { Button } from "@/components/ui/button";
 
 interface UserInfo {
   id?: number;
@@ -54,7 +55,9 @@ function UserCard({
   role,
 }: UserInfo) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -69,24 +72,19 @@ function UserCard({
     }
   };
 
-  // const handleDelete = async () => {
-  //   if (!confirm("Tem certeza que deseja excluir a foto de perfil?")) return;
+  const handleDelete = async () => {
+    if (!confirm("Tem certeza que deseja excluir a foto de perfil?")) return;
 
-  //   const formData = new FormData();
-  //   if (id) formData.append("user_id", id.toString());
-  //   formData.append("profile_picture_id", profile_picture_id);
-
-  //   try {
-  //     await deleteProfilePictureAction(formData);
-  //     alert("Foto de perfil excluída com sucesso!");
-  //   } catch (error) {
-  //     console.error("Failed to delete profile picture:", error);
-  //     alert("Erro ao excluir a foto de perfil.");
-  //   }
-  // };
+    try {
+      await deletePhoto();
+    } catch (error) {
+      console.error("Failed to delete profile picture:", error);
+      alert("Erro ao excluir a foto de perfil.");
+    }
+  };
 
   return (
-    <div className="gap-4 mt-10 max-w-md flex items-center justify-center rounded-lg p-8 mb-4 bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]">
+    <div className="gap-8 mt-10 max-w-md flex items-center justify-center rounded-lg p-8 mb-4 bg-[#080d17] border border-[#19212f] ">
       <div className="flex flex-col items-center">
         {profile_picture ? (
           <img
@@ -99,29 +97,7 @@ function UserCard({
             Sem foto
           </div>
         )}
-        <div className="flex gap-2 mt-2">
-          <label className="cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-md flex items-center gap-1">
-            <Upload size={16} />
-            Upload
-            <input
-              type="file"
-              className="hidden"
-              accept="image/*"
-              onChange={handleUpload}
-            />
-          </label>
-          {/* {profile_picture && (
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="flex items-center gap-1 px-3 py-1 bg-[#ff4d4f] text-white rounded-md hover:bg-[#d9363e] transition-colors"
-              title="Excluir foto"
-            >
-              <Trash2 size={16} />
-              <span>Excluir</span>
-            </button>
-          )} */}
-        </div>
+
         {/* <input
           type="file"
           ref={fileInputRef}
@@ -134,6 +110,32 @@ function UserCard({
         <p className="w-fit text-lg font-semibold">{nickname}</p>
         <p className="w-fit text-sm">{role}</p>
         <p className="w-fit text-sm">{personal_email}</p>
+        <div className="flex gap-2 mt-2">
+          <Button
+            className=" py-2 mt-4 bg-[#f1f5f9] text-[#0f172a] font-medium rounded-md hover:bg-[#c5cbd1] transition-colors cursor-pointer"
+            onClick={handleUploadClick}
+          >
+            <Upload size={16} />
+            Upload
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept="image/*"
+              onChange={handleUpload}
+            />
+          </Button>
+          {profile_picture && (
+            <Button
+              variant="ghost"
+              className="bg-[#080D17] hover:[#1A222F] text-white cursor-pointer border border-[#1A222F] mt-4"
+              onClick={handleDelete}
+            >
+              <Trash size={16} />
+              Delete
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

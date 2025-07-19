@@ -53,7 +53,7 @@ export async function listarTechnologies() {
 
 export async function listarTechnologyPorID(id: number) {
   const res = await api.get(`/technologies/${id}`);
-  console.log(res.data.data);
+
   return res.data.data;
 }
 

@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 export async function uploadProfilePic(formData: FormData) {
   try {
     const token = await getToken();
-    console.log("uploadProfilePic");
+
     const res = await api.post("/users/profile-picture", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,7 +32,28 @@ export async function uploadPhoto(formData: FormData) {
         "Content-Type": undefined, // ❌ remove o forçado
       },
     });
-    console.log("Upload bem-sucedido!");
+
+    revalidatePath("/profile");
+
+    redirect("/profile");
+
+    return response.data;
+  } catch (error: any) {
+    // console.error("Erro no upload:", error?.response || error);
+  }
+}
+
+export async function deletePhoto() {
+  const token = await getToken();
+
+  try {
+    const response = await api.delete("/users/profile-picture", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": undefined, // ❌ remove o forçado
+      },
+    });
+
     revalidatePath("/profile");
 
     redirect("/profile");

@@ -14,15 +14,15 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
     url_linkedin: undefined,
     url_github: undefined,
   };
-  // console.log(newData);
+
   const res = await api.post("/users", newData);
-  console.log("response:", res.data);
+
   return res.data;
 }
 
 export async function listarUsuarios() {
   const res = await api.get("/users?pageNumber=1&pageSize=100");
-  // console.log("response:", res.data.data.items);
+
   return res.data.data.items;
 }
 export async function listarUsuario() {
@@ -102,7 +102,7 @@ export async function uploadProfilePictureAction(
 ): Promise<void> {
   try {
     const token = await getToken();
-    console.log(token);
+
     const response = await api.post("/users/profile-picture", {
       headers: {
         ContentType: "multipart/form-data",

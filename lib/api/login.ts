@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export async function login(data: { email: string; password: string }) {
   const res = await api.post("/auth/login", data);
-  console.log("Login response:", res.data);
+
   return res.data;
 }
 

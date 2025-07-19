@@ -23,7 +23,7 @@ export async function editTechAction(
     id: formData.get("id")?.toString() || "",
     name: formData.get("name")?.toString() || "",
   };
-  console.log("editTechAction");
+
   const validatedFields = techSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
