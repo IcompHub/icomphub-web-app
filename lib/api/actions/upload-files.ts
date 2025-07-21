@@ -42,7 +42,26 @@ export async function uploadPhoto(formData: FormData) {
     // console.error("Erro no upload:", error?.response || error);
   }
 }
+export async function uploadThumbnail(id: number, formData: FormData) {
+  const token = await getToken();
 
+  try {
+    const response = await api.post(`/projects/thumbnail/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": undefined, // ❌ remove o forçado
+      },
+    });
+
+    revalidatePath("/profile");
+
+    redirect("/profile");
+
+    return response.data;
+  } catch (error: any) {
+    // console.error("Erro no upload:", error?.response || error);
+  }
+}
 export async function deletePhoto() {
   const token = await getToken();
 
