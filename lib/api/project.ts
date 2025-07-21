@@ -212,13 +212,28 @@ export interface PaginatedProjectsResponse {
 }
 
 export async function criarProjeto(data: ProjetoPayload) {
-  const res = await api.post("/projects", data);
+  const { technologies, ...rest } = data;
+  const newData = {
+    ...rest,
+    technology_ids: technologies.map((tech) => tech.id),
+  };
 
-  return res.data;
+  try {
+    const res = await api.post("/projects", newData);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function atualizarProjeto(id: number, data: any) {
-  const res = await api.put(`/projects/${id}`, data);
+export async function atualizarProjeto(id: number, data: ProjetoPayload) {
+  const { technologies, ...rest } = data;
+  const newData = {
+    ...rest,
+    technology_ids: technologies.map((tech) => tech.id),
+  };
+  console.log(newData);
+  const res = await api.put(`/projects/${id}`, newData);
 
   return res.data;
 }

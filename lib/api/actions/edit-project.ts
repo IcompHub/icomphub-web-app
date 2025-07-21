@@ -28,14 +28,16 @@ export async function editProjectAction(
     name: formData.get("name"),
     descricao: formData.get("descricao"),
     url: formData.get("url"),
-    participantes: formData.getAll("participantes"),
-    tecnologias: formData.getAll("tecnologias"),
+    participantes: JSON.parse(formData.get("participantes") as string),
+    tecnologias: JSON.parse(formData.get("tecnologias") as string),
   };
+
+  // console.log(rawData);
 
   // Valida os dados usando Zod
   const validatedFields = ProjectFormSchema.safeParse(rawData);
-
   if (!validatedFields.success) {
+    console.log(validatedFields.error);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Erro de validação. Por favor, corrija os campos.",
@@ -55,8 +57,10 @@ export async function editProjectAction(
     slug: generateSlug(name),
     members: participantes.map((p) => ({
       nickname: p.nickname,
-      role: p.role,
+      role: undefined,
       user_id: p.user_id,
+      role_ids: [2],
+      id: p.user_id,
     })),
     technologies: tecnologias,
   };

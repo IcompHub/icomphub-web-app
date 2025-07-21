@@ -12,6 +12,7 @@ export const ProjectFormSchema = z.object({
   participantes: z
     .array(
       z.object({
+        id: z.number().optional(),
         user_id: z.number(),
         nickname: z.string(),
         role: z.string(),
@@ -19,7 +20,7 @@ export const ProjectFormSchema = z.object({
     )
     .min(1, { message: "Selecione pelo menos um participante." }),
   tecnologias: z
-    .array(z.object({ name: z.string(), slug: z.string() }))
+    .array(z.object({ id: z.number(), name: z.string(), slug: z.string() }))
     .min(1, { message: "Selecione pelo menos uma tecnologia." }),
   url: z.string().url({ message: "URL inválida. Insira uma URL completa." }),
 });
@@ -50,13 +51,23 @@ export interface ProjetoPayload {
   technologies: DefaultPayload[];
 }
 
+export interface Role {
+  id: number;
+  slug: string;
+  name: string;
+  status: string;
+}
 export interface MemberPayload {
   nickname: string;
-  role: string;
+  role?: string;
+  role_ids: number[];
+  id?: number;
   user_id: number;
+  roles?: Role[];
 }
 
 export interface DefaultPayload {
+  id: number;
   name: string;
   slug: string;
 }
