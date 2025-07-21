@@ -1,4 +1,5 @@
 // lib/api/projects.ts
+import { requestToBodyStream } from "next/dist/server/body-streams";
 import { ProjetoPayload } from "../definitions";
 import api from "./axios";
 
@@ -195,6 +196,7 @@ export interface ProjectDetails {
 
 export interface Project {
   id: number;
+  thumbnail_id: string | null;
   slug: string;
   name: string;
   status: string;
@@ -212,13 +214,28 @@ export interface PaginatedProjectsResponse {
 }
 
 export async function criarProjeto(data: ProjetoPayload) {
-  const res = await api.post("/projects", data);
+  const { technologies, ...rest } = data;
+  const newData = {
+    ...rest,
+    technology_ids: technologies.map((tech) => tech.id),
+  };
 
-  return res.data;
+  try {
+    const res = await api.post("/projects", newData);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function atualizarProjeto(id: number, data: any) {
-  const res = await api.put(`/projects/${id}`, data);
+export async function atualizarProjeto(id: number, data: ProjetoPayload) {
+  const { technologies, ...rest } = data;
+  const newData = {
+    ...rest,
+    technology_ids: technologies.map((tech) => tech.id),
+  };
+  console.log(newData);
+  const res = await api.put(`/projects/${id}`, newData);
 
   return res.data;
 }
@@ -229,6 +246,50 @@ export async function listarProjetos(): Promise<Project[]> {
   );
 
   return res.data.data.items;
+}
+
+export async function listarThumbProjetos(
+  projetos: Project[]
+): Promise<{ project_id: number; thumbnail: string | null }[]> {
+  if (projetos.length === 0) {
+    return [];
+  }
+
+  const thumbnails = await Promise.all(
+    projetos.map(async (projeto) => {
+      if (!projeto.thumbnail_id) {
+        return {
+          project_id: projeto.id,
+          thumbnail: null,
+        };
+      }
+
+      try {
+        const response = await api.get(`/projects/thumbnail/${projeto.id}`, {
+          responseType: "arraybuffer",
+        });
+
+        const contentType = response.headers["content-type"];
+        const base64 = Buffer.from(response.data).toString("base64");
+
+        return {
+          project_id: projeto.id,
+          thumbnail: `data:${contentType};base64,${base64}`,
+        };
+      } catch (error) {
+        console.error(
+          `Erro ao buscar thumbnail do projeto ${projeto.id}:`,
+          error
+        );
+        return {
+          project_id: projeto.id,
+          thumbnail: null,
+        };
+      }
+    })
+  );
+
+  return thumbnails;
 }
 
 export interface Role {
@@ -268,6 +329,28 @@ export async function listarProjetoPorID(id: number) {
   const projects: ProjectDetailsDTO = res.data.data;
 
   return projects;
+}
+
+export async function listarThumbPorID(id: number) {
+  try {
+    const response = await api.get(`/projects/thumbnail/${id}`, {
+      responseType: "arraybuffer",
+    });
+
+    const contentType = response.headers["content-type"];
+    const base64 = Buffer.from(response.data).toString("base64");
+
+    return {
+      project_id: id,
+      thumbnail: `data:${contentType};base64,${base64}`,
+    };
+  } catch (error) {
+    // console.error(`Erro ao buscar thumbnail do ${id}:`, error);
+    return {
+      project_id: id,
+      thumbnail: null,
+    };
+  }
 }
 
 export async function buscarProjetoPorId(id: string | number) {

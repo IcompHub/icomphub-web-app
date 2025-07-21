@@ -12,16 +12,19 @@ import {
   ProjetoPayload,
   MemberPayload,
   DefaultPayload,
+  Role,
 } from "@/lib/definitions";
 
 interface ProjectFormProps {
   initialData?: ProjetoPayload;
   submitText?: string;
-  technologies: { name: string; slug: string }[];
+  technologies: { id: number; name: string; slug: string }[];
   users: {
     id: number;
     nickname: string;
     role: string;
+    role_ids: number[];
+    roles: Role[];
   }[];
 }
 
@@ -39,21 +42,16 @@ export const formSchema = z.object({
     )
     .min(1, "Selecione pelo menos um participante."),
   tecnologias: z
-    .array(z.object({ name: z.string(), slug: z.string() }))
+    .array(
+      z.object({
+        id: z.number().optional(),
+        name: z.string(),
+        slug: z.string(),
+      })
+    )
     .min(1, "Selecione pelo menos uma tecnologia."),
   url: z.string().url("URL inválida. Insira uma URL completa."),
 });
-
-export type State = {
-  errors?: {
-    name?: string[];
-    descricao?: string[];
-    participantes?: string[];
-    tecnologias?: string[];
-    url?: string[];
-  };
-  message?: string | null;
-};
 
 export default function ProjectForm({
   initialData,
@@ -78,9 +76,10 @@ export default function ProjectForm({
         descricao: initialData.data?.description ?? "",
         participantes:
           initialData.members?.map((m: MemberPayload) => ({
-            user_id: m.user_id,
+            user_id: m.id ?? 0,
             nickname: m.nickname,
             role: m.role,
+            role_ids: m.roles?.map((role: Role) => role.id),
           })) ?? [],
         tecnologias: initialData.technologies ?? [],
         url: initialData.data?.url ?? "",
@@ -93,7 +92,7 @@ export default function ProjectForm({
         tecnologias: [],
         url: "",
       };
-
+  console.log("initialData", initialData?.technologies);
   return (
     <form
       action={submitText === "Cadastrar" ? formActionCreate : formActionUpdate}
@@ -146,6 +145,7 @@ export default function ProjectForm({
             user_id: user.id,
             nickname: user.nickname,
             role: user.role,
+            role_ids: user.roles?.map((role: Role) => role.id),
           }))}
           defaultValue={mappedInitialData.participantes}
         />

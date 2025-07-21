@@ -28,10 +28,12 @@ type Technology = {
 };
 
 type User = {
+  id?: number;
   user_id: number;
   nickname: string;
   status?: string;
   role?: string;
+  role_ids?: number[];
 };
 
 type OptionType = "user" | "technology";
@@ -87,6 +89,8 @@ export default function MultiCombobox({
     );
   };
 
+  // if (type === "user") console.log(options);
+
   // Serialize selected values to JSON
   const serializedValue = JSON.stringify(
     selectedValues.map((val) => ({
@@ -95,11 +99,16 @@ export default function MultiCombobox({
             user_id: (val as User).user_id,
             nickname: (val as User).nickname,
             role: (val as User).role || "",
+            role_ids: (val as User).role_ids || [],
           }
-        : { name: (val as Technology).name, slug: (val as Technology).slug }),
+        : {
+            id: (val as Technology).id,
+            name: (val as Technology).name,
+            slug: (val as Technology).slug,
+          }),
     }))
   );
-
+  // console.log(selectedValues);
   return (
     <div className={cn("w-full", className)}>
       <Popover open={open} onOpenChange={setOpen}>

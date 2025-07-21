@@ -37,27 +37,35 @@ const gradients = [
 
 interface ListProjectsProps {
   projetos: Project[];
+  thumbnails: { project_id: number; thumbnail: string | null }[];
 }
 
-export default function ListProjects({ projetos }: ListProjectsProps) {
+export default function ListProjects({
+  projetos,
+  thumbnails,
+}: ListProjectsProps) {
   return (
     <>
       {projetos && projetos.length > 0 ? (
         <div className="lg:gap-8 md:gap-6 lg:grid md:grid lg:grid-cols-3 md:grid-cols-2 ">
-          {projetos.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              {/* Espalha todas as props do projeto e adiciona o gradiente */}
-              <ProjectCard
-                {...project}
-                gradient={gradients[i % gradients.length]}
-              />
-            </motion.div>
-          ))}
+          {projetos.map((project, i) => {
+            const thumb = thumbnails.find((t) => t.project_id === project.id);
+            return (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                {/* Espalha todas as props do projeto e adiciona o gradiente */}
+                <ProjectCard
+                  {...project}
+                  gradient={gradients[i % gradients.length]}
+                  thumbnail={thumb?.thumbnail ?? null}
+                />
+              </motion.div>
+            );
+          })}
         </div>
       ) : (
         <div className="h-150 flex flex-col items-center justify-center w-full text-center ">
@@ -71,6 +79,7 @@ export default function ListProjects({ projetos }: ListProjectsProps) {
 
 type ProjectCardProps = Project & {
   gradient: string;
+  thumbnail: string | null;
 };
 
 function ProjectCard({
@@ -80,11 +89,20 @@ function ProjectCard({
   data,
   technologies,
   gradient,
+  thumbnail,
 }: ProjectCardProps) {
   return (
     <Link href={`/project/${slug}-${id}`} className="block h-full">
       <div className="flex flex-col h-full rounded-lg overflow-hidden bg-[#080d17] border border-[#19212f] transition-transform hover:scale-[1.01]  mb-6">
-        <div className={`h-28 bg-gradient-to-r ${gradient}`} />
+        {thumbnail ? (
+          <img
+            src={thumbnail}
+            alt={`imagem do projeto ${id}`}
+            className="h-28 w-full object-cover object-center"
+          />
+        ) : (
+          <div className={`h-28 bg-gradient-to-r ${gradient}`} />
+        )}
         <div className="p-6 flex flex-col flex-grow">
           <h2 className="text-xl font-bold mb-2">{name}</h2>
 

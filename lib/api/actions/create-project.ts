@@ -44,8 +44,10 @@ export async function createProjectAction(
     slug: generateSlug(name),
     members: participantes.map((p) => ({
       nickname: p.nickname,
-      role: p.role,
+      // role: p.role,
       user_id: p.user_id,
+      project_id: 0,
+      role_ids: [2],
     })),
     technologies: tecnologias,
   };

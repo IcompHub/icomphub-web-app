@@ -1,5 +1,5 @@
 import { Footer } from "@/components/project/footer";
-import { listarProjetos } from "@/lib/api/project";
+import { listarProjetos, listarThumbProjetos } from "@/lib/api/project";
 import ListProjects from "@/components/project/list-projects";
 import { ProjectPagination } from "@/components/project/project-pagination";
 import { CreateProjectButton } from "@/components/project/create-project-button";
@@ -7,6 +7,7 @@ import { CreateProjectButton } from "@/components/project/create-project-button"
 export default async function ProjectsPage() {
   // const [search, setSearch] = useState("");
   const projetos = await listarProjetos();
+  const thumbnails = await listarThumbProjetos(projetos);
 
   return (
     <div className=" bg-[#010103] text-[#f1f5f9] p-6">
@@ -15,7 +16,7 @@ export default async function ProjectsPage() {
           <h1 className="text-3xl font-bold mb-6">Projetos</h1>
           <CreateProjectButton />
         </div>
-        <ListProjects projetos={projetos} />
+        <ListProjects projetos={projetos} thumbnails={thumbnails} />
         <ProjectPagination />
         <Footer />
       </div>
