@@ -20,9 +20,10 @@ export interface TechnologyPayload {
 }
 
 export interface Technology extends TechnologyPayload {
-  id?: number;
+  id: number;
   name: string;
   slug?: string;
+  has_image?: boolean;
 }
 
 // CRUD
@@ -60,4 +61,45 @@ export async function listarTechnologyPorID(id: number) {
 export async function buscarTechnologyPorId(id: string | number) {
   const res = await api.get(`/technologies/${id}`);
   return res.data;
+}
+
+export async function listarImgsTech(
+  technologies: Technology[]
+): Promise<{ tech_id: number; thumbnail: string | null }[]> {
+  if (technologies.length === 0) {
+    return [];
+  }
+
+  const thumbnails = await Promise.all(
+    technologies.map(async (tech) => {
+      if (!tech.has_image) {
+        return {
+          tech_id: tech.id,
+          thumbnail: null,
+        };
+      }
+
+      try {
+        const response = await api.get(`/technologies/image/${tech.id}`, {
+          responseType: "arraybuffer",
+        });
+
+        const contentType = response.headers["content-type"];
+        const base64 = Buffer.from(response.data).toString("base64");
+
+        return {
+          tech_id: tech.id,
+          thumbnail: `data:${contentType};base64,${base64}`,
+        };
+      } catch (error) {
+        console.error(`Erro ao buscar thumbnail do tech ${tech.id}:`, error);
+        return {
+          tech_id: tech.id,
+          thumbnail: null,
+        };
+      }
+    })
+  );
+
+  return thumbnails;
 }

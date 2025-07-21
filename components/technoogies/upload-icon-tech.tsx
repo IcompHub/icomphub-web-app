@@ -1,5 +1,5 @@
 "use client";
-import { uploadThumbnail } from "@/lib/api/actions/upload-files";
+import { uploadImgTech, uploadThumbnail } from "@/lib/api/actions/upload-files";
 import { ImageUp, PenLine } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-export function UploadIcon({ id, slug }: { id: number; slug: string }) {
+export function UploadIconTech({ id, slug }: { id: number; slug: string }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -23,26 +23,25 @@ export function UploadIcon({ id, slug }: { id: number; slug: string }) {
     formData.append("image", file);
 
     try {
-      const res = await uploadThumbnail(id, formData);
+      const res = await uploadImgTech(id, formData);
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <div className="flex gap-3">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link href={`/project/${slug}-${id}/edit`}>
+      <Link href={`/technologies/${slug}-${id}/edit`}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
               <PenLine className="transition-colors cursor-pointer rounded border border-transparent hover:bg-white hover:border-[#1a222f] hover:text-[#1a222f] m-1" />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>Editar projeto</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>Editar tecnologia</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </Link>
       <input
         type="file"
         ref={fileInputRef}

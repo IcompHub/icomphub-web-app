@@ -82,3 +82,21 @@ export async function deletePhoto() {
     // console.error("Erro no upload:", error?.response || error);
   }
 }
+
+export async function uploadImgTech(id: number, formData: FormData) {
+  const token = await getToken();
+  try {
+    const response = await api.put(`/technologies/image/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": undefined, // ❌ remove o forçado
+      },
+    });
+
+    revalidatePath("/profile");
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Erro no upload:", error?.response || error);
+  }
+}
